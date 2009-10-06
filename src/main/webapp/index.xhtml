@@ -1,0 +1,48 @@
+<lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
+  <div class="span-14">
+    <lift:Games.upcoming5>
+	    <h3 class="alt">Die nächsten Begegnungen</h3>
+	    <table>
+	      <tr>
+          <th>&nbsp;</th>
+	        <th>Datum</th>
+	        <th>Gruppe</th>
+	        <th>Ort</th>
+	        <th>Begegnung</th>
+	      </tr>
+	      <games:list>
+	        <template:game>
+			      <tr>
+              <td><game:tip/></td>
+			        <td><game:date/></td>
+              <td><game:group/></td>
+			        <td><game:location/></td>
+              <td><game:teams/></td>
+			      </tr>
+	        </template:game>
+       </games:list>
+	    </table>
+    </lift:Games.upcoming5>
+  </div>
+  <div class="span-6 last">
+    <h3 class="alt">Die besten Tipper</h3>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+      <tr>
+        <td>Jörn</td>
+        <td>35</td>
+      </tr>
+      <tr>
+        <td>Stephan</td>
+        <td>13</td>
+      </tr>
+      <tr>
+        <td>Heiko</td>
+        <td>11</td>
+      </tr>
+    </table>
+  </div>
+</lift:surround>
