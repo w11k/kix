@@ -15,13 +15,26 @@
  */
 package com.kix.model
 
+import net.liftweb.http.S.??
 import net.liftweb.mapper._
+import net.liftweb.util.Log
 import scala.xml.NodeSeq
 
 /**
  * Helper for a persistent user.
  */
 class User extends MegaProtoUser[User] {
+
+  def eventuallyCreateAdmin() {
+    if (User.find(By(email, "admin@kix.com")).isEmpty) {
+      User.create.email("admin@kix.com")
+                 .firstName("Admin")
+                 .password("kixadmin")
+                 .superUser(true)
+                 .validated(true).save
+      Log info "Created admin user: admin@kix.com, kixadmin"
+    }
+  }
 
   override def getSingleton = User
 }
