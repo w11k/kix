@@ -1,14 +1,14 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
   <div>
     <lift:Games.upcoming5>
-	    <h3 class="alt"><lift:loc locid="games.upcoming">Upcoming games</lift:loc></h3>
+	    <h3 class="alt"><lift:loc>Upcoming Games</lift:loc></h3>
 	    <table>
 	      <tr>
           <th>&nbsp;</th>
-          <th><lift:loc locid="date">Date</lift:loc></th>
-          <th><lift:loc locid="group">Group</lift:loc></th>
-          <th><lift:loc locid="location">Location</lift:loc></th>
-	        <th><lift:loc locid="game">Game</lift:loc></th>
+          <th><lift:loc>Date</lift:loc></th>
+          <th><lift:loc>Group</lift:loc></th>
+          <th><lift:loc>Location</lift:loc></th>
+	        <th><lift:loc>Game</lift:loc></th>
 	      </tr>
 	      <games:list>
 	        <template:game>
@@ -23,27 +23,5 @@
        </games:list>
 	    </table>
     </lift:Games.upcoming5>
-  </div>
-  <hr/>
-  <div>
-    <h3 class="alt"><lift:loc locid="tipsters.leaderboard">Tipsters' leaderboard</lift:loc></h3>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Punkte</th>
-      </tr>
-      <tr>
-        <td>Jörn</td>
-        <td>35</td>
-      </tr>
-      <tr>
-        <td>Stephan</td>
-        <td>13</td>
-      </tr>
-      <tr>
-        <td>Heiko</td>
-        <td>11</td>
-      </tr>
-    </table>
   </div>
 </lift:surround>

@@ -18,6 +18,7 @@ package com.kix.lib
 import java.util._
 import java.text._
 import DateFormat._
+import net.liftweb.util._
 
 object Util {
 
@@ -25,7 +26,12 @@ object Util {
 
   def format(date: Date, locale: Locale) = dateFormat(locale) format date
 
-  def parse(date: String, locale: Locale) = dateFormat(locale) parse date
+  def parse(date: String, locale: Locale) = try {
+    Full(dateFormat(locale) parse date)
+  } catch { case e => 
+    Log error ("Cannot parse date \"%s\"!".format(date), e)
+    Failure("Bad date: " + date, Full(e), Empty) 
+  }
 
   implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
 

@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.kix.lib
 
-/**
- * A group.
- */
-object Group extends Enumeration {
-  val A = Value("A")
-  val B = Value("B")
-  val C = Value("C")
-  val D = Value("D")
-  val E = Value("E")
-  val F = Value("F")
-  val G = Value("G")
-  val H = Value("H")
+import net.liftweb.http.S.?
+import net.liftweb.mapper._
+
+trait SuperCRUDify[K, T <: KeyedMapper[K, T]] extends CRUDify[K, T] {
+  self: T with KeyedMetaMapper[K, T] =>
+
+  override def createMenuName = ?("createMenuName", displayName)
+
+  override def showAllMenuName = ?("showAllMenuName", showAllMenuDisplayName)
+
+  def showAllMenuDisplayName = displayName + "s"
 }

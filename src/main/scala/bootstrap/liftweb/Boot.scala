@@ -17,8 +17,8 @@ package bootstrap.liftweb
 
 import com.kix.model._
 import com.kix.lib._
-import java.sql._
-import java.util.Locale
+import java.sql.{Connection, DriverManager}
+import java.util.{Date, Locale}
 import net.liftweb.http._
 import net.liftweb.mapper._
 import net.liftweb.util._
@@ -30,9 +30,6 @@ class Boot {
   def boot() {
     Log info "Booting kix.com, please stand by ..."
 
-    // Use SLF4J for logging
-    Slf4jLogBoot.enable()
-
     // Freeze locale as GERMAN
     LiftRules.localeCalculator = 
       req => SessionLocale.is openOr LiftRules.defaultLocaleCalculator(req)
@@ -43,16 +40,23 @@ class Boot {
     // Use UTF-8
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }
 
+    LiftRules.formatDate = 
+      date => Util.format(if (date != null) date else new Date(), S.locale)
+
+    LiftRules.parseDate = s => s match {
+      case null => Empty
+      case s    => Util.parse(s, S.locale)
+    }
+
     // Use com.kix to resolve snippets and views
     LiftRules addToPackages "com.kix"
 
-    // Setup sitemap: Home, ..., CRUD stuff, ...
+    // Setup sitemap: Home, CRUD stuff, ...
+    val adminSubMenus = Team.menus ::: Game.menus
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
-                         Team.menus: _*)
+                         adminSubMenus: _*)
     val menus = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) ::
-                // Menu(Loc("teams", ("teams" :: Nil) -> false, "Teams")) ::
-                //Menu(Loc("tips", ("tips" :: Nil) -> true, "Tips")) ::
                 adminMenu ::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)

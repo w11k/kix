@@ -23,8 +23,6 @@
   <properties>
     <scala.version>2.7.5</scala.version>
     <lift.version>1.1-SNAPSHOT</lift.version>
-    <scalatest.version>0.9.5</scalatest.version>
-    <slf4j.version>1.5.8</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -46,14 +44,9 @@
       <version>${lift.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${slf4j.version}</version>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>

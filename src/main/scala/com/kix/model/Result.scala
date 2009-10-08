@@ -15,16 +15,26 @@
  */
 package com.kix.model
 
+import net.liftweb.mapper._
+
 /**
- * A group.
+ * Helper for a persistent result.
  */
-object Group extends Enumeration {
-  val A = Value("A")
-  val B = Value("B")
-  val C = Value("C")
-  val D = Value("D")
-  val E = Value("E")
-  val F = Value("F")
-  val G = Value("G")
-  val H = Value("H")
+object Result extends Result with LongKeyedMetaMapper[Result] {
+
+  val GoalRange = 0 to 20
+}
+
+/**
+ * A persistent result.
+ */
+class Result extends LongKeyedMapper[Result] with IdPK {
+
+  object game extends MappedLongForeignKey(this, Game)
+
+  object goals1 extends MappedRange(this, Result.GoalRange)
+
+  object goals2 extends MappedRange(this, Result.GoalRange)
+
+  override def getSingleton = Result
 }

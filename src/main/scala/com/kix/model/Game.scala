@@ -15,15 +15,22 @@
  */
 package com.kix.model
 
-import net.liftweb.http.SHtml._
+import lib.SuperCRUDify
+import net.liftweb.http.S.?
 import net.liftweb.mapper._
-import net.liftweb.util._
-import net.liftweb.util.Helpers._
+import net.liftweb.util.Box
+import net.liftweb.util.Helpers.timeNow
 
 /**
  * Helper for a persistent game.
  */
-object Game extends Game with LongKeyedMetaMapper[Game] {
+object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, Game] {
+
+//  override def fieldOrder = List(group, team1, team2, date, location)
+
+  override def displayName = ?("Game")
+
+  override def showAllMenuDisplayName = ?("Games")
 
   def upcoming(n: Int) = findAll(By_>(date, timeNow), 
                                  OrderBy(date, Ascending),
@@ -36,15 +43,25 @@ object Game extends Game with LongKeyedMetaMapper[Game] {
  */
 class Game extends LongKeyedMapper[Game] with IdPK {
 
-  object group extends MappedEnum(this, Group)
+  object group extends MappedEnum(this, Group) {
+    override def displayName = ?("Group") 
+  }
 
-  object team1 extends MappedLongForeignKey(this, Team)
+  object team1 extends MappedLongForeignKey(this, Team) {
+    override def displayName = ?("Team 1") 
+  }
 
-  object team2 extends MappedLongForeignKey(this, Team)
+  object team2 extends MappedLongForeignKey(this, Team) {
+    override def displayName = ?("Team 2") 
+  }
 
-  object date extends MappedDateTime(this)
+  object date extends MappedDateTime(this) {
+    override def displayName = ?("Date") 
+  }
 
-  object location extends MappedString(this, 100)
+  object location extends MappedString(this, 100) {
+    override def displayName = ?("Location") 
+  }
 
   def teamsToString = {
     def name(team: Box[Team]) = team map { _.name.is } getOrElse "?"
@@ -52,57 +69,4 @@ class Game extends LongKeyedMapper[Game] with IdPK {
   }
 
   override def getSingleton = Game
-}
-
-/**
- * Helper for a persistent result.
- */
-object Result extends Result with LongKeyedMetaMapper[Result] {
-
-  val GoalRange = 0 to 20
-}
-
-/**
- * A persistent result.
- */
-class Result extends LongKeyedMapper[Result] with IdPK {
-
-  object game extends MappedLongForeignKey(this, Game)
-
-  object goals1 extends MappedRange(this, Result.GoalRange)
-
-  object goals2 extends MappedRange(this, Result.GoalRange)
-
-  override def getSingleton = Result
-}
-
-/**
- * Helper for a persistent tip.
- */
-object Tip extends Tip with LongKeyedMetaMapper[Tip]
-
-/**
- * A persistent tip.
- */
-class Tip extends LongKeyedMapper[Tip] with IdPK {
-
-  object user extends MappedLongForeignKey(this, User)
-
-  object game extends MappedLongForeignKey(this, Game)
-
-  object goals1 extends MappedRange(this, Result.GoalRange)
-
-  object goals2 extends MappedRange(this, Result.GoalRange)
-
-  override def getSingleton = Tip
-}
-
-/**
- * Special MappedInt based on a range.
- */
-private[model] class MappedRange[M <: Mapper[M]](owner: M, range: Range) extends MappedInt(owner) {
-
-  override def toForm = Full(select(RangeMap, Full(is.toString), setFromAny(_))) 
-  
-  private lazy val RangeMap = range map { x => (x.toString, x.toString) }
 }
