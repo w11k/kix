@@ -19,28 +19,34 @@ import net.liftweb.http._
 import net.liftweb.http.SHtml.fileUpload
 import net.liftweb.mapper._
 import net.liftweb.util._
+import scala.xml.Text
 
 /**
- * Helper for a persistent group.
+ * A group.
  */
-object Group extends Group with LongKeyedMetaMapper[Group]
-
-/**
- * A persistent group.
- */
-class Group extends LongKeyedMapper[Group] with IdPK {
-
-  object name extends MappedString(this, 1)
-
-  override def getSingleton = Group
+object Group extends Enumeration {
+  val A = Value("A")
+  val B = Value("B")
+  val C = Value("C")
+  val D = Value("D")
+  val E = Value("E")
+  val F = Value("F")
+  val G = Value("G")
+  val H = Value("H")
 }
 
 /**
  * Helper for a persistent team.
  */
-object Team extends Team with LongKeyedMetaMapper[Team] {
+object Team extends Team with LongKeyedMetaMapper[Team] with CRUDify[Long, Team] {
 
-  def findByGroup(group: Group) = findAll(By(Team.group, group.id))
+  def findByGroup(group: Group.Value) = findAll(By(Team.group, group))
+  
+  override def showAllMenuName = S.?("showAllMenuName", displayName)
+
+  override def createMenuName = S.?("createMenuName", displayName)
+
+  override val displayName = "Team"
 }
 
 /**
@@ -48,9 +54,13 @@ object Team extends Team with LongKeyedMetaMapper[Team] {
  */
 class Team extends LongKeyedMapper[Team] with IdPK {
 
-  object group extends MappedLongForeignKey(this, Group)
+  object group extends MappedEnum(this, Group) {
+    override def displayName = S.?("Group") 
+  }
 
-  object name extends MappedString(this, 100)
+  object name extends MappedString(this, 100) {
+    override def displayName = S.?("Name") 
+  }
 
   override def getSingleton = Team
 }

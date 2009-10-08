@@ -16,6 +16,7 @@
 package bootstrap.liftweb
 
 import com.kix.model._
+import com.kix.lib._
 import java.sql._
 import java.util.Locale
 import net.liftweb.http._
@@ -33,7 +34,8 @@ class Boot {
     Slf4jLogBoot.enable()
 
     // Freeze locale as GERMAN
-    LiftRules.localeCalculator = request => Locale.GERMAN
+    LiftRules.localeCalculator = 
+      req => SessionLocale.is openOr LiftRules.defaultLocaleCalculator(req)
 
     // Add "messages.properties" resources
     LiftRules.resourceNames = "Messages" :: Nil
@@ -45,15 +47,19 @@ class Boot {
     LiftRules addToPackages "com.kix"
 
     // Setup sitemap: Home, ..., CRUD stuff, ...
+    val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
+    val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
+                         Team.menus: _*)
     val menus = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) ::
                 // Menu(Loc("teams", ("teams" :: Nil) -> false, "Teams")) ::
                 //Menu(Loc("tips", ("tips" :: Nil) -> true, "Tips")) ::
+                adminMenu ::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)
 
     // Setup database
     DB.defineConnectionManager(DefaultConnectionIdentifier , DBVendor)
-    Schemifier.schemify(true, Log.infoF _, Group, Team, Game, Result, Tip, User)
+    Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
     User.eventuallyCreateAdmin()
 
     Log info "Successfully booted kix.com. Have fun!"

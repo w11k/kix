@@ -1,14 +1,30 @@
-.menu {
-  list-style-type: none;
-  margin: 0pt;
-  margin-bottom: 10pt;
+.sidebar {
 }
 
-.menu-item {
-  display:      inline;
-  margin-right: 10pt;
+.menu ul {
+  border-bottom: 1px solid #ddd;
+	list-style-type: none;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
-ul ul li {
-  color: red;
+.menu ul li {
+	border: 1px solid #ddd;
+  border-bottom: none;
+  margin: 0px;
+	padding: 5px;
+}
+
+.menu ul li ul {
+	border: none;
+}
+
+.menu ul li ul li {
+  border: none;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.menu a {
+	text-decoration: none;
 }

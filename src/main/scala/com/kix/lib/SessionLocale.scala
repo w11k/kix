@@ -15,21 +15,8 @@
  */
 package com.kix.lib
 
-import java.util._
-import java.text._
-import DateFormat._
+import java.util.Locale
+import net.liftweb.http._
+import net.liftweb.util._
 
-object Util {
-
-  val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"
-
-  def format(date: Date, locale: Locale) = dateFormat(locale) format date
-
-  def parse(date: String, locale: Locale) = dateFormat(locale) parse date
-
-  implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
-
-  private def dateFormat(pattern: String) = new SimpleDateFormat(pattern)
-
-  private def dateFormat(locale: Locale) = getDateTimeInstance(SHORT, SHORT, locale)
-}
+object SessionLocale extends SessionVar[Box[Locale]](Empty)

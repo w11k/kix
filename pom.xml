@@ -168,14 +168,14 @@
 
   <repositories>
     <repository>
-      <id>scala-tools-releases</id>
+      <id>scala-tools.org</id>
       <url>http://scala-tools.org/repo-releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>scala-tools-snapshots</id>
+      <id>scala-tools.org.snapshots</id>
       <url>http://scala-tools.org/repo-snapshots</url>
       <releases>
         <enabled>false</enabled>

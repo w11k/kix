@@ -4,22 +4,54 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="keywords" content="soccer, champion, championship, 2010"/>
     <title>kix</title>
+    <lift:CSS.blueprint />
+    <lift:CSS.fancyType />
     <link rel="stylesheet" type="text/css" href="/style/kix.css"/>
     <!--link rel="stylesheet" type="text/css" href="/style/jquery-ui-1.7.2.custom.css"/-->
-    <link rel="stylesheet" type="text/css" href="/classpath/blueprint/screen.css"/>
-    <link rel="stylesheet" type="text/css" href="/classpath/blueprint/plugins/fancy-type/screen.css"/>
     <script type="text/javascript" src="/classpath/jquery.js" />
     <!--script type="text/javascript" src="/js/jquery-ui-1.7.2.custom.min.js" /-->
   </head>
 
   <body>
     <div class="container">
-      <div class="span-2">&nbsp;</div>
-      <div class="span-20 last">
-	      <div class="span-20 last"><lift:Menu.builder ul:class="menu" li:class="menu-item"/></div>
-	      <hr/>
-		    <div class="span-20 last"><lift:bind name="content"/></div>
+      <div class="span-20">
+        <img src="/images/lift.png" alt="Lift Web Framework"/>
       </div>
+      <div class="span-4 last" style="text-align: right;">
+        <img src="/images/ajax-loader.gif" alt="" id="ajax-loader" style="display:none"/>
+        <lift:Locales/>
+      </div>
+      <hr/>
+      <div class="span-8">
+        <div class="menu">
+          <lift:Menu.builder/>
+        </div>
+        <hr/>
+		    <h3 class="alt">Die besten Tipper</h3>
+		    <table>
+		      <tr>
+		        <th>Name</th>
+		        <th>Punkte</th>
+		      </tr>
+		      <tr>
+		        <td>Jörn</td>
+		        <td>35</td>
+		      </tr>
+		      <tr>
+		        <td>Stephan</td>
+		        <td>13</td>
+		      </tr>
+		      <tr>
+		        <td>Heiko</td>
+		        <td>11</td>
+		      </tr>
+		    </table>
+
+      </div>
+      <div class="span-1">&nbsp;</div>
+	    <div class="span-15 last">
+	      <lift:bind name="content"/>
+	    </div>
 	  </div>
   </body>
 

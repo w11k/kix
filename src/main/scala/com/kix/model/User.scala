@@ -20,27 +20,8 @@ import net.liftweb.mapper._
 import net.liftweb.util.Log
 import scala.xml.NodeSeq
 
-/**
+ /**
  * Helper for a persistent user.
- */
-class User extends MegaProtoUser[User] {
-
-  def eventuallyCreateAdmin() {
-    if (User.find(By(email, "admin@kix.com")).isEmpty) {
-      User.create.email("admin@kix.com")
-                 .firstName("Admin")
-                 .password("kixadmin")
-                 .superUser(true)
-                 .validated(true).save
-      Log info "Created admin user: admin@kix.com, kixadmin"
-    }
-  }
-
-  override def getSingleton = User
-}
-
-/**
- * A persistent user.
  */
 object User extends User with MetaMegaProtoUser[User] {
 
@@ -58,9 +39,32 @@ object User extends User with MetaMegaProtoUser[User] {
 
   override def changePasswordXhtml = surround(super.changePasswordXhtml)
 
+  def tipsters = findAll(NotBy(superUser, true))
+
+  def deleteAllTipsters() = bulkDelete_!!(NotBy(superUser, true))
+
+  def eventuallyCreateAdmin() {
+    if (find(By(email, "admin@kix.com")).isEmpty) {
+      create.email("admin@kix.com")
+            .firstName("Admin")
+            .password("kixadmin")
+            .superUser(true)
+            .validated(true).save
+      Log info "Created admin user: admin@kix.com, kixadmin"
+    }
+  }
+
   private def surround(xhtml: => NodeSeq) = 
     <lift:surround with="default" at="content">
       <lift:Msgs><lift:error_class>error</lift:error_class></lift:Msgs>
       { xhtml }
     </lift:surround>
+}
+
+/**
+* A persistent user.
+*/
+class User extends MegaProtoUser[User] {
+
+  override def getSingleton = User
 }

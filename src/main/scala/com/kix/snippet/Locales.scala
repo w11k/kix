@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.kix.snippet
 
-import java.util._
-import java.text._
-import DateFormat._
+import java.util.Locale._
+import lib._
+import net.liftweb.http.S
+import net.liftweb.http.SHtml._
+import net.liftweb.util._
+import net.liftweb.util.Helpers._
+import scala.xml.{NodeSeq, Text}
 
-object Util {
+class Locales {
 
-  val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"
-
-  def format(date: Date, locale: Locale) = dateFormat(locale) format date
-
-  def parse(date: String, locale: Locale) = dateFormat(locale) parse date
-
-  implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
-
-  private def dateFormat(pattern: String) = new SimpleDateFormat(pattern)
-
-  private def dateFormat(locale: Locale) = getDateTimeInstance(SHORT, SHORT, locale)
+  def render(xhtml: NodeSeq) = {
+    def path = S.request map { _.request.url.toString } openOr ""
+    link(path, () => SessionLocale(Full(GERMANY)), <img src="/images/DE-12x18.gif" alt="DE" title="DE"/>) ++
+    Text(" ") ++
+    link(path, () => SessionLocale(Full(UK)), <img src="/images/UK-12x18.gif" alt="UK" title="UK"/>)  
+  }
 }

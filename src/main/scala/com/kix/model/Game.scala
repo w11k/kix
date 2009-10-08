@@ -27,6 +27,7 @@ object Game extends Game with LongKeyedMetaMapper[Game] {
 
   def upcoming(n: Int) = findAll(By_>(date, timeNow), 
                                  OrderBy(date, Ascending),
+                                 OrderBy(group, Ascending),
                                  MaxRows(n))
 }
 
@@ -35,7 +36,7 @@ object Game extends Game with LongKeyedMetaMapper[Game] {
  */
 class Game extends LongKeyedMapper[Game] with IdPK {
 
-  object group extends MappedLongForeignKey(this, Group)
+  object group extends MappedEnum(this, Group)
 
   object team1 extends MappedLongForeignKey(this, Team)
 
@@ -56,7 +57,10 @@ class Game extends LongKeyedMapper[Game] with IdPK {
 /**
  * Helper for a persistent result.
  */
-object Result extends Result with LongKeyedMetaMapper[Result]
+object Result extends Result with LongKeyedMetaMapper[Result] {
+
+  val GoalRange = 0 to 20
+}
 
 /**
  * A persistent result.
@@ -65,9 +69,9 @@ class Result extends LongKeyedMapper[Result] with IdPK {
 
   object game extends MappedLongForeignKey(this, Game)
 
-  object goals1 extends MappedGoal(this)
+  object goals1 extends MappedRange(this, Result.GoalRange)
 
-  object goals2 extends MappedGoal(this)
+  object goals2 extends MappedRange(this, Result.GoalRange)
 
   override def getSingleton = Result
 }
@@ -86,19 +90,19 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object game extends MappedLongForeignKey(this, Game)
 
-  object goals1 extends MappedGoal(this)
+  object goals1 extends MappedRange(this, Result.GoalRange)
 
-  object goals2 extends MappedGoal(this)
+  object goals2 extends MappedRange(this, Result.GoalRange)
 
   override def getSingleton = Tip
 }
 
 /**
- * Special MappedInt used for goals.
+ * Special MappedInt based on a range.
  */
-private[model] class MappedGoal[M <: Mapper[M]](owner: M) extends MappedInt(owner) {
+private[model] class MappedRange[M <: Mapper[M]](owner: M, range: Range) extends MappedInt(owner) {
 
-  override def toForm = Full(select(Goals, Full(is.toString), setFromAny(_))) 
+  override def toForm = Full(select(RangeMap, Full(is.toString), setFromAny(_))) 
   
-  private lazy val Goals = (0 to 20) map { x => (x.toString, x.toString) }
+  private lazy val RangeMap = range map { x => (x.toString, x.toString) }
 }

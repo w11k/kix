@@ -17,6 +17,7 @@ package com.kix.snippet
 
 import lib.Util._
 import model._
+import net.liftweb.http.S._
 import net.liftweb.util.Helpers._
 import scala.xml.NodeSeq
 
@@ -26,7 +27,7 @@ class Games {
     def bindGames(games: List[Game]) = games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
            "tip" -> "x",
-           "date" -> formatShortDateTime(game.date.is),
+           "date" -> format(game.date.is, locale),
            "group" -> game.group.is.toString,
            "location" -> game.location.is,
            "teams" -> game.teamsToString

@@ -1,0 +1,46 @@
+<lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
+  <div>
+    <h3 class="alt"><lift:loc locid="overview">Overview</lift:loc></h3>
+    <lift:Admin.overview>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2"><lift:loc locid="database.content">Database content</lift:loc></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><lift:loc locid="teams">Teams</lift:loc></td>
+            <td><overview:teams/></td>
+          </tr>
+          <tr>
+            <td><lift:loc locid="games">Games</lift:loc></td>
+            <td><overview:games/></td>
+          </tr>
+          <tr>
+            <td><lift:loc locid="results">Results</lift:loc></td>
+            <td><overview:results/></td>
+          </tr>
+          <tr>
+            <td><lift:loc locid="tipsters">Tipsters</lift:loc></td>
+            <td><overview:tipsters/></td>
+          </tr>
+          <tr>
+            <td><lift:loc locid="tips">Tips</lift:loc></td>
+            <td><overview:tips/></td>
+          </tr>
+        </tbody>
+      </table>
+    </lift:Admin.overview>
+  </div>
+  <hr/>
+  <div>
+    <h3 class="alt"><lift:loc locid="database.reset">Reset database</lift:loc></h3>
+    <lift:Admin.reset form="post"/>
+  </div>
+  <hr/>
+  <div>
+    <h3 class="alt"><lift:loc locid="database.init">Initialize database</lift:loc></h3>
+    <lift:Admin.init form="post"/>
+  </div>
+</lift:surround>
