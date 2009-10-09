@@ -1,27 +1,25 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <div>
-    <lift:Games.upcoming5>
-	    <h3 class="alt"><lift:loc>Upcoming Games</lift:loc></h3>
-	    <table>
-	      <tr>
-          <th>&nbsp;</th>
-          <th><lift:loc>Date</lift:loc></th>
-          <th><lift:loc>Group</lift:loc></th>
-          <th><lift:loc>Location</lift:loc></th>
-	        <th><lift:loc>Game</lift:loc></th>
-	      </tr>
-	      <games:list>
-	        <template:game>
-			      <tr>
-              <td><game:tip/></td>
-			        <td><game:date/></td>
-              <td><game:group/></td>
-			        <td><game:location/></td>
-              <td><game:teams/></td>
-			      </tr>
-	        </template:game>
-       </games:list>
-	    </table>
-    </lift:Games.upcoming5>
-  </div>
+  <div><lift:Games.upcoming5>
+    <h3 class="alt"><lift:loc>Upcoming Games</lift:loc></h3>
+    <table>
+      <tr>
+        <th>&nbsp;</th>
+        <th><lift:loc>Date</lift:loc></th>
+        <th><lift:loc>Group</lift:loc></th>
+        <th><lift:loc>Location</lift:loc></th>
+        <th><lift:loc>Game</lift:loc></th>
+      </tr>
+      <games:list>
+        <template:game>
+          <tr>
+            <td><game:tip /></td>
+            <td><game:date /></td>
+            <td><game:group /></td>
+            <td><game:location /></td>
+            <td><game:teams /></td>
+          </tr>
+        </template:game>
+      </games:list>
+    </table>
+  </lift:Games.upcoming5></div>
 </lift:surround>

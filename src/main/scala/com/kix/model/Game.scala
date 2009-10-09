@@ -38,9 +38,6 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
                                  OrderBy(date, Ascending),
                                  OrderBy(group, Ascending),
                                  MaxRows(n))
-
-  def games4select =
-    Game.findAll map { game => (game.id.is.toString, game.teamsToString) }
 }
 
 /**
@@ -64,7 +61,7 @@ class Game extends LongKeyedMapper[Game] with IdPK {
     override def displayName = ?("Location") 
   }
 
-  def teamsToString = {
+  def name = {
     def name(team: Box[Team]) = team map { _.name.is } getOrElse "?"
     name(team1.obj) + " - " + name(team2.obj)
   }
@@ -72,6 +69,9 @@ class Game extends LongKeyedMapper[Game] with IdPK {
   override def getSingleton = Game
 }
 
+/**
+ * A mappable team.
+ */
 private[model] class MappedTeam(game: Game, dispName: String) extends MappedLongForeignKey(game, Team) {
 
   override def displayName = ?(dispName)
@@ -79,5 +79,7 @@ private[model] class MappedTeam(game: Game, dispName: String) extends MappedLong
   override def asHtml = obj map { team => Text(team.name.is) } openOr Text("")
 
   override def toForm =
-    Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
+    Full(select(Team.findAll map { team => (team.id.is.toString, team.name.is) }, 
+                obj map { _.id.toString }, 
+                s => apply(s.toLong)))
 }

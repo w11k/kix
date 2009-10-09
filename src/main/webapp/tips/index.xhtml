@@ -1,0 +1,27 @@
+<lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
+  <h3 class="alt"><lift:loc>Tips Overview</lift:loc></h3>
+  <lift:Tips.overview>
+    <table>
+      <thead>
+        <tr>
+          <th><lift:loc>Game</lift:loc></th>
+          <th><lift:loc>Date</lift:loc></th>
+          <th><lift:loc>Tipster</lift:loc></th>
+          <th><lift:loc>Tip</lift:loc></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tips:list>
+          <template:tip>
+            <tr>
+              <td><tip:game /></td>
+              <td><tip:date /></td>
+              <td><tip:tipster /></td>
+              <td><tip:tip /></td>
+            </tr>
+          </template:tip>
+        </tips:list>
+      </tbody>
+    </table>
+  </lift:Tips.overview>
+</lift:surround>

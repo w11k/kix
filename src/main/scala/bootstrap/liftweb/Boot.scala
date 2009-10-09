@@ -20,6 +20,7 @@ import com.kix.lib._
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
 import net.liftweb.http._
+import net.liftweb.http.S.?
 import net.liftweb.mapper._
 import net.liftweb.util._
 import net.liftweb.sitemap._
@@ -52,12 +53,23 @@ class Boot {
     LiftRules addToPackages "com.kix"
 
     // Setup sitemap: Home, CRUD stuff, ...
+    val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
+    
+    val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
+    
+    val tipSubMenus = Menu(Loc("tips.new", ("tips" :: "edit" :: Nil) -> false, 
+                               ?("New Tip"), ifLoggedIn)) :: Nil
+    val tipMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips")),
+                       tipSubMenus: _*) :: Nil
+    
     val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
-                         adminSubMenus: _*)
-    val menus = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) ::
-                adminMenu ::
+                         adminSubMenus: _*) :: Nil
+    
+    val menus = homeMenu :::
+                tipMenu :::
+                adminMenu :::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)
 

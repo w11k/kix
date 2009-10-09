@@ -15,7 +15,7 @@
  */
 package com.kix.snippet
 
-import lib.Util
+import lib.Util.format
 import model._
 import net.liftweb.http.S._
 import net.liftweb.util.Helpers._
@@ -27,10 +27,10 @@ class Games {
     def bindGames(games: List[Game]) = games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
            "tip" -> "x",
-           "date" -> Util.format(game.date.is, locale),
+           "date" -> format(game.date.is, locale),
            "group" -> game.group.is.toString,
            "location" -> game.location.is,
-           "teams" -> game.teamsToString
+           "teams" -> game.name
       )
     }
     bind("games", xhtml, "list" -> bindGames(Game upcoming 5))

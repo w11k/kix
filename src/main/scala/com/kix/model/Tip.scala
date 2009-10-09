@@ -16,16 +16,16 @@
 package com.kix.model
 
 import lib._
-import net.liftweb.http.SHtml.select
+import net.liftweb.http.S.?
 import net.liftweb.mapper._
-import net.liftweb.util.Full
+import scala.xml.{NodeSeq, Text}
 
 /**
  * Helper for a persistent tip.
  */
 object Tip extends Tip with LongKeyedMetaMapper[Tip] {
 
-  override def fieldOrder = List(game, goals1, goals2)
+  def findByUserId(id: Long) = findAll(By(Tip.user, id))
 }
 
 /**
@@ -35,11 +35,23 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object user extends MappedLongForeignKey(this, User)
 
-  object game extends MappedGame(this)
+  object game extends MappedGame(this) {
+    override def selectableGames = {
+      val userTips = Tip findByUserId user.is
+      Game.findAll filter { game => !(userTips contains game) }
+    }
+  }
 
   object goals1 extends MappedRange(this, Result.GoalRange)
 
   object goals2 extends MappedRange(this, Result.GoalRange)
+
+  def goals = goals1.is + " : " + goals2.is
+
+  def toForm =
+    (goals1.toForm openOr NodeSeq.Empty) ++
+    Text(" : ") ++ 
+    (goals2.toForm openOr NodeSeq.Empty)
 
   override def getSingleton = Tip
 }

@@ -54,12 +54,19 @@ class Result extends LongKeyedMapper[Result] with IdPK {
   override def getSingleton = Result
 }
 
+/**
+ * A mappable game.
+ */
 private[model] class MappedGame[T <: Mapper[T]](mapper: T) extends MappedLongForeignKey(mapper, Game) {
 
   override def displayName = ?("Game")
 
-  override def asHtml = obj map { game => Text(game.teamsToString) } openOr Text("")
+  override def asHtml = obj map { game => Text(game.name) } openOr Text("")
 
   override def toForm =
-    Full(select(Game.games4select, obj map { _.id.toString }, s => apply(s.toLong)))
+    Full(select(selectableGames map { game => (game.id.is.toString, game.name) }, 
+                obj map { _.id.toString }, 
+                s => apply(s.toLong)))
+
+  def selectableGames = Game.findAll
 }
