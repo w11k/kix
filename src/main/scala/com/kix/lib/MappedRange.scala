@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.kix.lib
 
-import lib._
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
 import net.liftweb.util.Full
 
 /**
- * Helper for a persistent tip.
+ * Special MappedInt based on a range.
  */
-object Tip extends Tip with LongKeyedMetaMapper[Tip]
+class MappedRange[M <: Mapper[M]](owner: M, range: Range) extends MappedInt(owner) {
 
-/**
- * A persistent tip.
- */
-class Tip extends LongKeyedMapper[Tip] with IdPK {
-
-  object user extends MappedLongForeignKey(this, User)
-
-  object game extends MappedLongForeignKey(this, Game)
-
-  object goals1 extends MappedRange(this, Result.GoalRange)
-
-  object goals2 extends MappedRange(this, Result.GoalRange)
-
-  override def getSingleton = Tip
+  override def toForm = Full(select(RangeMap, Full(is.toString), setFromAny(_))) 
+  
+  private lazy val RangeMap = range map { x => (x.toString, x.toString) }
 }

@@ -15,14 +15,22 @@
  */
 package com.kix.model
 
+import lib._
+import net.liftweb.http.S.?
+import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
+import net.liftweb.util._
 
 /**
  * Helper for a persistent result.
  */
-object Result extends Result with LongKeyedMetaMapper[Result] {
-
+object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[Long, Result] {
+   
   val GoalRange = 0 to 20
+
+  override def displayName = ?("Result")
+
+  override def showAllMenuDisplayName = ?("Results")
 }
 
 /**
@@ -30,11 +38,19 @@ object Result extends Result with LongKeyedMetaMapper[Result] {
  */
 class Result extends LongKeyedMapper[Result] with IdPK {
 
-  object game extends MappedLongForeignKey(this, Game)
+  object game extends MappedLongForeignKey(this, Game) {
+    override def displayName = ?("Game") 
+    override def toForm =
+      Full(select(Game.games4select, obj map { _.id.toString }, s => apply(s.toLong)))
+  }
 
-  object goals1 extends MappedRange(this, Result.GoalRange)
+  object goals1 extends MappedRange(this, Result.GoalRange) {
+    override def displayName = ?("Goals Team 1") 
+  }
 
-  object goals2 extends MappedRange(this, Result.GoalRange)
+  object goals2 extends MappedRange(this, Result.GoalRange) {
+    override def displayName = ?("Goals Team 2") 
+  }
 
   override def getSingleton = Result
 }

@@ -24,13 +24,14 @@ import net.liftweb.mapper._
  */
 object Team extends Team with LongKeyedMetaMapper[Team] with SuperCRUDify[Long, Team] {
 
-//  override def fieldOrder = List(group, name)
-
   override def displayName = ?("Team")
 
   override def showAllMenuDisplayName = ?("Teams")
 
   def findByGroup(group: Group.Value) = findAll(By(Team.group, group))
+
+  def teams4select =
+    Team.findAll map { team => (team.id.is.toString, team.name.is) }
 }
 
 /**

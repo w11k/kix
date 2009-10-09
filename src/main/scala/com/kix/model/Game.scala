@@ -17,16 +17,15 @@ package com.kix.model
 
 import lib.SuperCRUDify
 import net.liftweb.http.S.?
+import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
-import net.liftweb.util.Box
+import net.liftweb.util._
 import net.liftweb.util.Helpers.timeNow
 
 /**
  * Helper for a persistent game.
  */
 object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, Game] {
-
-//  override def fieldOrder = List(group, team1, team2, date, location)
 
   override def displayName = ?("Game")
 
@@ -36,6 +35,9 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
                                  OrderBy(date, Ascending),
                                  OrderBy(group, Ascending),
                                  MaxRows(n))
+
+  def games4select =
+    Game.findAll map { game => (game.id.is.toString, game.teamsToString) }
 }
 
 /**
@@ -44,15 +46,19 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
 class Game extends LongKeyedMapper[Game] with IdPK {
 
   object group extends MappedEnum(this, Group) {
-    override def displayName = ?("Group") 
+    override def displayName = ?("Group")
   }
 
   object team1 extends MappedLongForeignKey(this, Team) {
-    override def displayName = ?("Team 1") 
+    override def displayName = ?("Team 1")
+    override def toForm =
+      Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
   }
 
   object team2 extends MappedLongForeignKey(this, Team) {
     override def displayName = ?("Team 2") 
+    override def toForm =
+      Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
   }
 
   object date extends MappedDateTime(this) {

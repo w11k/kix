@@ -52,7 +52,7 @@ class Boot {
     LiftRules addToPackages "com.kix"
 
     // Setup sitemap: Home, CRUD stuff, ...
-    val adminSubMenus = Team.menus ::: Game.menus
+    val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
                          adminSubMenus: _*)
