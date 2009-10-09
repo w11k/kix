@@ -21,11 +21,14 @@ import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
 import net.liftweb.util._
 import net.liftweb.util.Helpers.timeNow
+import scala.xml.Text
 
 /**
  * Helper for a persistent game.
  */
 object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, Game] {
+
+  override def fieldOrder = List(group, team1, team2, date, location)
 
   override def displayName = ?("Game")
 
@@ -49,17 +52,9 @@ class Game extends LongKeyedMapper[Game] with IdPK {
     override def displayName = ?("Group")
   }
 
-  object team1 extends MappedLongForeignKey(this, Team) {
-    override def displayName = ?("Team 1")
-    override def toForm =
-      Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
-  }
+  object team1 extends MappedTeam(this, "Team 1")
 
-  object team2 extends MappedLongForeignKey(this, Team) {
-    override def displayName = ?("Team 2") 
-    override def toForm =
-      Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
-  }
+  object team2 extends MappedTeam(this, "Team 2")
 
   object date extends MappedDateTime(this) {
     override def displayName = ?("Date") 
@@ -75,4 +70,14 @@ class Game extends LongKeyedMapper[Game] with IdPK {
   }
 
   override def getSingleton = Game
+}
+
+private[model] class MappedTeam(game: Game, dispName: String) extends MappedLongForeignKey(game, Team) {
+
+  override def displayName = ?(dispName)
+
+  override def asHtml = obj map { team => Text(team.name.is) } openOr Text("")
+
+  override def toForm =
+    Full(select(Team.teams4select, obj map { _.id.toString }, s => apply(s.toLong)))
 }

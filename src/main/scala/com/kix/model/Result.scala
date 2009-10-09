@@ -20,13 +20,16 @@ import net.liftweb.http.S.?
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
 import net.liftweb.util._
+import scala.xml.Text
 
 /**
  * Helper for a persistent result.
  */
 object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[Long, Result] {
-   
+
   val GoalRange = 0 to 20
+
+  override def fieldOrder = List(game, goals1, goals2)
 
   override def displayName = ?("Result")
 
@@ -38,11 +41,7 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
  */
 class Result extends LongKeyedMapper[Result] with IdPK {
 
-  object game extends MappedLongForeignKey(this, Game) {
-    override def displayName = ?("Game") 
-    override def toForm =
-      Full(select(Game.games4select, obj map { _.id.toString }, s => apply(s.toLong)))
-  }
+  object game extends MappedGame(this)
 
   object goals1 extends MappedRange(this, Result.GoalRange) {
     override def displayName = ?("Goals Team 1") 
@@ -53,4 +52,14 @@ class Result extends LongKeyedMapper[Result] with IdPK {
   }
 
   override def getSingleton = Result
+}
+
+private[model] class MappedGame[T <: Mapper[T]](mapper: T) extends MappedLongForeignKey(mapper, Game) {
+
+  override def displayName = ?("Game")
+
+  override def asHtml = obj map { game => Text(game.teamsToString) } openOr Text("")
+
+  override def toForm =
+    Full(select(Game.games4select, obj map { _.id.toString }, s => apply(s.toLong)))
 }

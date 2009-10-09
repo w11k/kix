@@ -23,7 +23,10 @@ import net.liftweb.util.Full
 /**
  * Helper for a persistent tip.
  */
-object Tip extends Tip with LongKeyedMetaMapper[Tip]
+object Tip extends Tip with LongKeyedMetaMapper[Tip] {
+
+  override def fieldOrder = List(game, goals1, goals2)
+}
 
 /**
  * A persistent tip.
@@ -32,7 +35,7 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object user extends MappedLongForeignKey(this, User)
 
-  object game extends MappedLongForeignKey(this, Game)
+  object game extends MappedGame(this)
 
   object goals1 extends MappedRange(this, Result.GoalRange)
 
