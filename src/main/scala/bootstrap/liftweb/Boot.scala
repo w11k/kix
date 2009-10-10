@@ -83,12 +83,12 @@ class Boot {
 }
 
 private object DBVendor extends ConnectionManager {
+
+  Class forName (Props get "db.driver" openOr "org.h2.Driver")
+
   def newConnection(id: ConnectionIdentifier): Box[Connection] = {
     try {
-      // Use H2 driver and local database
-      Class forName "org.h2.Driver"
-      val con = DriverManager getConnection "jdbc:h2:~/.h2/kix"
-      
+      val con = DriverManager getConnection (Props get "db.url" openOr "jdbc:h2:~/.h2/kix")
       Log debug "Successfully got new Connection."
       Full(con)
     } catch {
@@ -99,6 +99,7 @@ private object DBVendor extends ConnectionManager {
       }
     }
   }
+
   def releaseConnection(con: Connection) {
     con.close
   }
