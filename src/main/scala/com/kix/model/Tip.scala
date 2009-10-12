@@ -30,10 +30,13 @@ object Tip extends Tip with LongKeyedMetaMapper[Tip] {
   def findByUser(user: Box[User]) =
     user map { u => findByUserId(u.id) } openOr Nil
 
+  def findByUserId(id: Long) = findAll(By(Tip.user, id))
+
+  def findByUserAndGame(user: Box[User], game: Game) =
+    user map { u => find(By(Tip.user, u.id), By(Tip.game, game.id)) } openOr Empty
+
   def findNotByUser(user: Box[User]) =
     user map { u => findNotByUserId(u.id) } openOr Nil
-
-  def findByUserId(id: Long) = findAll(By(Tip.user, id))
 
   def findNotByUserId(id: Long) = findAll(NotBy(Tip.user, id))
 }

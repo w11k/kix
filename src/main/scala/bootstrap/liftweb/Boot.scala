@@ -56,11 +56,17 @@ class Boot {
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
     
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
-    
-    val tipSubMenus = Menu(Loc("tips.new", ("tips" :: "edit" :: Nil) -> false, 
-                               ?("New Tip"))) :: Nil
-    val tipMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips"), ifLoggedIn),
-                       tipSubMenus: _*) :: Nil
+
+    val gamesMenu = Menu(Loc("games", ("games" :: "index" :: Nil) -> false, 
+                             ?("Games and Groups"))) :: Nil
+
+    val tipsSubMenus = Menu(Loc("tips.create", ("tips" :: "create" :: Nil) -> false, 
+                               ?("Create Tip"))) :: 
+                       Menu(Loc("tips.edit", ("tips" :: "edit" :: Nil) -> false, 
+                               ?("Edit Tip"), Hidden)) ::
+                       Nil
+    val tipsMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips"), ifLoggedIn),
+                        tipsSubMenus: _*) :: Nil
     
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
@@ -68,7 +74,8 @@ class Boot {
                          adminSubMenus: _*) :: Nil
     
     val menus = homeMenu :::
-                tipMenu :::
+                gamesMenu :::
+                tipsMenu :::
                 adminMenu :::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)

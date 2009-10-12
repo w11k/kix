@@ -51,7 +51,11 @@
       </div>
       <div class="span-1">&nbsp;</div>
 	    <div class="span-17 last">
-        <lift:Msgs/>
+        <lift:Msgs>
+          <lift:error_class>error</lift:error_class>
+          <lift:notice_class>notice</lift:notice_class>
+          <lift:warning_class>error</lift:warning_class>
+        </lift:Msgs>
 	      <lift:bind name="content"/>
 	    </div>
 	  </div>

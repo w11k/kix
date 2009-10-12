@@ -28,19 +28,27 @@ import scala.xml.{NodeSeq, Text}
 object Tips {
 
   object currentTip extends RequestVar[Box[Tip]](Empty)
+
+  object currentGame extends RequestVar[Box[Game]](Empty)
+
+  def editDelete(tip: Tip) = 
+    link("/tips/edit", () => Tips.currentTip(Full(tip)), ImgHelper.edit) ++
+      Text("") ++
+      link(".", () => tip.delete_!, ImgHelper.delete)
+
+  def create(game: Game) = {
+    Tips.currentGame(Full(game))
+    link("/tips/create", () => (), ImgHelper.create)
+  }
 }
 
 class Tips {
 
   def myTips(xhtml: NodeSeq) = {
-    def editDelete(tip: Tip) = 
-      link("edit", () => Tips.currentTip(Full(tip)), ImgHelper.edit) ++
-        Text("") ++
-        link(".", () => tip.delete_!, ImgHelper.delete)
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
       bind("tip", chooseTemplate("template", "tip", xhtml),
-           "edit-delete" -> (if (notYetStarted_?(game)) editDelete(tip) 
+           "edit-delete" -> (if (notYetStarted_?(game)) Tips.editDelete(tip) 
                              else NodeSeq.Empty),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
@@ -64,9 +72,15 @@ class Tips {
                    }))
   }
 
-  def edit(xhtml: NodeSeq) = {
+  def create(xhtml: NodeSeq) =
+    createOrEdit(_.game.toForm openOr NodeSeq.Empty, xhtml)
+
+  def edit(xhtml: NodeSeq) = createOrEdit(_.game.asHtml, xhtml)
+
+  private def createOrEdit(game: Tip => NodeSeq, xhtml: NodeSeq) = {
     val tip = Tips.currentTip openOr {
       val newTip = Tip.create.user(User.currentUser)
+      for (g <- Tips.currentGame.is) newTip.game(g)
       Tips.currentTip(Full(newTip))
       newTip
     }
@@ -76,7 +90,7 @@ class Tips {
       S redirectTo "."
     }
     bind("tip", xhtml,
-         "game" -> tip.game.toForm,
+         "game" -> game(tip),
          "tip" -> tip.toForm,
          "save" -> submit(?("Save"), handleSave))
   }

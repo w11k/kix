@@ -34,10 +34,18 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
 
   override def showAllMenuDisplayName = ?("Games")
 
+  def upcoming = findAll(By_>(date, timeNow), 
+                         OrderBy(date, Ascending),
+                         OrderBy(group, Ascending))
+
   def upcoming(n: Int) = findAll(By_>(date, timeNow), 
                                  OrderBy(date, Ascending),
                                  OrderBy(group, Ascending),
                                  MaxRows(n))
+
+  def past = findAll(By_<(date, timeNow), 
+                     OrderBy(date, Ascending),
+                     OrderBy(group, Ascending))
 }
 
 /**
@@ -80,7 +88,7 @@ private[model] class MappedGame[T <: Mapper[T]](mapper: T) extends MappedLongFor
 
   override def toForm =
     Full(select(selectableGames map { game => (game.id.is.toString, game.name) }, 
-                obj map { _.id.toString }, 
+                obj map { _.id.is.toString }, 
                 s => apply(s.toLong)))
 
   def selectableGames = Game.findAll

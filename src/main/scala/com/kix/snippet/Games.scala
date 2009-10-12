@@ -15,23 +15,66 @@
  */
 package com.kix.snippet
 
+import lib.ImgHelper
 import lib.Util.format
 import model._
-import net.liftweb.http.S._
-import net.liftweb.util.Helpers._
+import net.liftweb.http._
+import S._
+import SHtml._
+import net.liftweb.util._
+import Helpers._
 import scala.xml.NodeSeq
+
+private[snippet] object Games {
+
+  object currentDateRange extends RequestVar(DateRange.Upcoming)
+
+  object DateRange extends Enumeration {
+    val All = Value("all")
+    val Upcoming = Value("upcoming")
+    val Past = Value("past")
+  }
+
+  val DateRanges = (for (d <- DateRange) yield (d.id.toString, ?(d.toString))).toList
+}
+
+import Games._
 
 class Games {
 
   def upcoming5(xhtml: NodeSeq) = {
-    def bindGames(games: List[Game]) = games flatMap { game =>
+    bind("games", xhtml, "list" -> bindGames(Game upcoming 5, xhtml))
+  }
+
+  def find(xhtml: NodeSeq) = {
+    def findForDateRange(dateRange: DateRange.Value) = dateRange match {
+      case DateRange.All => Game.findAll
+      case DateRange.Upcoming => Game.upcoming
+      case DateRange.Past => Game.past
+    }
+    bind("games", xhtml,
+         "date-range" -> select(DateRanges, Full(currentDateRange.is.id.toString), 
+                                s => currentDateRange(DateRange(s.toInt)), 
+                                "onchange" -> "submit();"),
+         "list" -> bindGames(findForDateRange(currentDateRange.is), xhtml))
+  }
+
+  private def bindGames(games: List[Game], xhtml: NodeSeq) = {
+    def bindTip(game: Game) =
+      if (game.date after timeNow)
+        Tip.findByUserAndGame(User.currentUser, game) match {
+          case Full(tip) => Tips editDelete tip 
+          case _ => Tips create game
+        }
+      else
+        ImgHelper.right
+    games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
-           "tip" -> "x",
+           "tip" -> (if (User.loggedIn_?) bindTip(game) else NodeSeq.Empty),
            "date" -> format(game.date.is, locale),
            "group" -> game.group.is.toString,
            "location" -> game.location.is,
            "teams" -> game.name)
     }
-    bind("games", xhtml, "list" -> bindGames(Game upcoming 5))
   }
 }

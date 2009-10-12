@@ -22,7 +22,15 @@ object ImgHelper {
   def img(path: String, title: => String) =
     <img src={ path } title={ title } alt={ title } />
 
+  def  create = img("/images/create.png", ?("Create"))
+
   def  edit = img("/images/edit.png", ?("Edit"))
 
   def  delete = img("/images/delete.png", ?("Delete"))
+
+  def  top = img("/images/top.png", "")
+
+  def  right = img("/images/right.png", "")
+
+  def  down = img("/images/down.png", "")
 }
