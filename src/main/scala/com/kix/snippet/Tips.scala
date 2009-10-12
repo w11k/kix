@@ -15,44 +15,61 @@
  */
 package com.kix.snippet
 
+import lib.ImgHelper
 import lib.Util.format
 import model._
 import net.liftweb.http._
 import S.{?, locale}
-import SHtml.submit
+import SHtml._
 import net.liftweb.util._
 import Helpers._
-import scala.xml.NodeSeq
+import scala.xml.{NodeSeq, Text}
 
 object Tips {
 
+  object currentTip extends RequestVar[Box[Tip]](Empty)
 }
 
 class Tips {
 
-  def overview(xhtml: NodeSeq) = {
+  def myTips(xhtml: NodeSeq) = {
+    def editDelete(tip: Tip) = 
+      link("edit", () => Tips.currentTip(Full(tip)), ImgHelper.edit) ++
+        Text("") ++
+        link(".", () => tip.delete_!, ImgHelper.delete)
+    def bindTips(tips: List[Tip]) = tips flatMap { tip =>
+      val game = tip.game.obj
+      bind("tip", chooseTemplate("template", "tip", xhtml),
+           "edit-delete" -> (if (game map { _.date.is after timeNow } openOr false) editDelete(tip) 
+                             else NodeSeq.Empty),
+           "game" -> (game map { _.name } openOr ""),
+           "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
+           "tip" -> tip.goals)
+    }
+    bind("tips", xhtml, "list" -> bindTips(Tip.findAll))
+  }
+
+  def otherTips(xhtml: NodeSeq) = {
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
       bind("tip", chooseTemplate("template", "tip", xhtml),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
-           "tip" -> tip.goals
-      )
+           "tip" -> tip.goals)
     }
     bind("tips", xhtml, "list" -> bindTips(Tip.findAll))
   }
 
   def edit(xhtml: NodeSeq) = {
-    val tip = Tip.create.user(User.currentUser)
-    def handleSave() {
-      tip.save
-      S redirectTo "."
+    val tip = Tips.currentTip openOr {
+      val newTip = Tip.create.user(User.currentUser)
+      Tips.currentTip(Full(newTip))
+      newTip
     }
     bind("tip", xhtml,
          "game" -> tip.game.toForm,
          "tip" -> tip.toForm,
-         "save" -> submit(?("Save"), handleSave)
-    )
+         "save" -> submit(?("Save"), () => { tip.save; S redirectTo "." }))
   }
 }

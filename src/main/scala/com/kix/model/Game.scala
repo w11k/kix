@@ -70,16 +70,18 @@ class Game extends LongKeyedMapper[Game] with IdPK {
 }
 
 /**
- * A mappable team.
+ * A mappable game.
  */
-private[model] class MappedTeam(game: Game, dispName: String) extends MappedLongForeignKey(game, Team) {
+private[model] class MappedGame[T <: Mapper[T]](mapper: T) extends MappedLongForeignKey(mapper, Game) {
 
-  override def displayName = ?(dispName)
+  override def displayName = ?("Game")
 
-  override def asHtml = obj map { team => Text(team.name.is) } openOr Text("")
+  override def asHtml = obj map { game => Text(game.name) } openOr Text("")
 
   override def toForm =
-    Full(select(Team.findAll map { team => (team.id.is.toString, team.name.is) }, 
+    Full(select(selectableGames map { game => (game.id.is.toString, game.name) }, 
                 obj map { _.id.toString }, 
                 s => apply(s.toLong)))
+
+  def selectableGames = Game.findAll
 }

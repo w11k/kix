@@ -1,2 +1,2 @@
 db.driver=org.apache.derby.jdbc.ClientDriver
-db.url=jdbc:derby://localhost/.derby-kix;create=true
+db.url=jdbc:derby://localhost/kix;create=true

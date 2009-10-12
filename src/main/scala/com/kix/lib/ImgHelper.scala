@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.snippet
+package com.kix.lib
 
-import lib.Util.format
-import model._
-import net.liftweb.http.S._
-import net.liftweb.util.Helpers._
-import scala.xml.NodeSeq
+import net.liftweb.http.S.?
 
-class Games {
+object ImgHelper {
 
-  def upcoming5(xhtml: NodeSeq) = {
-    def bindGames(games: List[Game]) = games flatMap { game =>
-      bind("game", chooseTemplate("template", "game", xhtml),
-           "tip" -> "x",
-           "date" -> format(game.date.is, locale),
-           "group" -> game.group.is.toString,
-           "location" -> game.location.is,
-           "teams" -> game.name)
-    }
-    bind("games", xhtml, "list" -> bindGames(Game upcoming 5))
-  }
+  def img(path: String, title: => String) =
+    <img src={ path } title={ title } alt={ title } />
+
+  def  edit = img("/images/edit.png", ?("Edit"))
+
+  def  delete = img("/images/delete.png", ?("Delete"))
 }

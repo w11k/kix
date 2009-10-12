@@ -17,7 +17,10 @@ package com.kix.model
 
 import lib.SuperCRUDify
 import net.liftweb.http.S.?
+import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
+import net.liftweb.util._
+import scala.xml.Text
 
 /**
  * Helper for a persistent team.
@@ -47,4 +50,19 @@ class Team extends LongKeyedMapper[Team] with IdPK {
   }
 
   override def getSingleton = Team
+}
+
+/**
+ * A mappable team.
+ */
+private[model] class MappedTeam(game: Game, dispName: String) extends MappedLongForeignKey(game, Team) {
+
+  override def displayName = ?(dispName)
+
+  override def asHtml = obj map { team => Text(team.name.is) } openOr Text("")
+
+  override def toForm =
+    Full(select(Team.findAll map { team => (team.id.is.toString, team.name.is) }, 
+                obj map { _.id.toString }, 
+                s => apply(s.toLong)))
 }

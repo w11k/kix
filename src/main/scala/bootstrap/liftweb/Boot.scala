@@ -58,12 +58,12 @@ class Boot {
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
     
     val tipSubMenus = Menu(Loc("tips.new", ("tips" :: "edit" :: Nil) -> false, 
-                               ?("New Tip"), ifLoggedIn)) :: Nil
-    val tipMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips")),
+                               ?("New Tip"))) :: Nil
+    val tipMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips"), ifLoggedIn),
                        tipSubMenus: _*) :: Nil
     
-    val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
+    val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
                          adminSubMenus: _*) :: Nil
     

@@ -37,8 +37,8 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object game extends MappedGame(this) {
     override def selectableGames = {
-      val userTips = Tip findByUserId user.is
-      Game.findAll filter { game => !(userTips contains game) }
+      val userTips: List[Long] = Tip findByUserId user.is map { _.game }
+      Game.findAll filter { game => !(userTips contains game.id.is) }
     }
   }
 

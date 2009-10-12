@@ -1,6 +1,32 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <h3 class="alt"><lift:loc>Tips Overview</lift:loc></h3>
-  <lift:Tips.overview>
+  <h3 class="alt"><lift:loc>My Tips</lift:loc></h3>
+  <lift:Tips.myTips>
+    <table>
+      <thead>
+        <tr>
+          <th><lift:loc>&nbsp;</lift:loc></th>
+          <th><lift:loc>Game</lift:loc></th>
+          <th><lift:loc>Date</lift:loc></th>
+          <th><lift:loc>Tip</lift:loc></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tips:list>
+          <template:tip>
+            <tr>
+              <td><tip:edit-delete /></td>
+              <td><tip:game /></td>
+              <td><tip:date /></td>
+              <td><tip:tip /></td>
+            </tr>
+          </template:tip>
+        </tips:list>
+      </tbody>
+    </table>
+  </lift:Tips.myTips>
+  <h3 class="alt"><lift:loc>Other Tipps</lift:loc></h3>
+  <!--
+  <lift:Tips.otherTips>
     <table>
       <thead>
         <tr>
@@ -23,5 +49,6 @@
         </tips:list>
       </tbody>
     </table>
-  </lift:Tips.overview>
+  </lift:Tips.otherTips>
+  -->
 </lift:surround>

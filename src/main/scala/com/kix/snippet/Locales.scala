@@ -28,7 +28,7 @@ class Locales {
   def render(xhtml: NodeSeq) = {
     def path = S.request map { _.request.url.toString } openOr ""
     link(path, () => SessionLocale(Full(GERMANY)), <img src="/images/DE-12x18.gif" alt="DE" title="DE"/>) ++
-    Text(" ") ++
-    link(path, () => SessionLocale(Full(UK)), <img src="/images/UK-12x18.gif" alt="UK" title="UK"/>)  
+      Text(" ") ++
+      link(path, () => SessionLocale(Full(UK)), <img src="/images/UK-12x18.gif" alt="UK" title="UK"/>)  
   }
 }
