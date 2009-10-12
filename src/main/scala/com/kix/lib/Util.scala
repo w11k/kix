@@ -15,10 +15,13 @@
  */
 package com.kix.lib
 
+import model._
+
 import java.util._
 import java.text._
 import DateFormat._
 import net.liftweb.util._
+import TimeHelpers.timeNow
 
 object Util {
 
@@ -34,6 +37,8 @@ object Util {
   }
 
   implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
+  
+  def notYetStarted_?(game: Box[Game]) = game map { _.date.is after timeNow } openOr false
 
   private def dateFormat(pattern: String) = new SimpleDateFormat(pattern)
 

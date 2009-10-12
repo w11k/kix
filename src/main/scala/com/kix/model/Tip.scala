@@ -18,6 +18,7 @@ package com.kix.model
 import lib._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
+import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 
 /**
@@ -38,7 +39,9 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
   object game extends MappedGame(this) {
     override def selectableGames = {
       val userTips: List[Long] = Tip findByUserId user.is map { _.game }
-      Game.findAll filter { game => !(userTips contains game.id.is) }
+      Game.findAll filter { game =>
+        !(userTips contains game.id.is) && game.date.after(timeNow)
+      }
     }
   }
 

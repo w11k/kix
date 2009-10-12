@@ -16,7 +16,7 @@
 package com.kix.snippet
 
 import lib.ImgHelper
-import lib.Util.format
+import lib.Util._
 import model._
 import net.liftweb.http._
 import S.{?, locale}
@@ -40,7 +40,7 @@ class Tips {
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
       bind("tip", chooseTemplate("template", "tip", xhtml),
-           "edit-delete" -> (if (game map { _.date.is after timeNow } openOr false) editDelete(tip) 
+           "edit-delete" -> (if (notYetStarted_?(game)) editDelete(tip) 
                              else NodeSeq.Empty),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
@@ -67,9 +67,14 @@ class Tips {
       Tips.currentTip(Full(newTip))
       newTip
     }
+    def handleSave() {
+      if (notYetStarted_?(tip.game.obj)) tip.save
+      else S notice ?("Cannot save tip, because game alredy started!")
+      S redirectTo "."
+    }
     bind("tip", xhtml,
          "game" -> tip.game.toForm,
          "tip" -> tip.toForm,
-         "save" -> submit(?("Save"), () => { tip.save; S redirectTo "." }))
+         "save" -> submit(?("Save"), handleSave))
   }
 }
