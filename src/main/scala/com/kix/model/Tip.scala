@@ -18,6 +18,7 @@ package com.kix.model
 import lib._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
+import net.liftweb.util._
 import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 
@@ -26,7 +27,15 @@ import scala.xml.{NodeSeq, Text}
  */
 object Tip extends Tip with LongKeyedMetaMapper[Tip] {
 
+  def findByUser(user: Box[User]) =
+    user map { u => findByUserId(u.id) } openOr Nil
+
+  def findNotByUser(user: Box[User]) =
+    user map { u => findNotByUserId(u.id) } openOr Nil
+
   def findByUserId(id: Long) = findAll(By(Tip.user, id))
+
+  def findNotByUserId(id: Long) = findAll(NotBy(Tip.user, id))
 }
 
 /**

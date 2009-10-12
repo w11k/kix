@@ -46,19 +46,22 @@ class Tips {
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tip" -> tip.goals)
     }
-    bind("tips", xhtml, "list" -> bindTips(Tip.findAll))
+    bind("tips", xhtml, "list" -> bindTips(Tip findByUser User.currentUser))
   }
 
   def otherTips(xhtml: NodeSeq) = {
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
       bind("tip", chooseTemplate("template", "tip", xhtml),
+           "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
            "tip" -> tip.goals)
     }
-    bind("tips", xhtml, "list" -> bindTips(Tip.findAll))
+    bind("tips", xhtml, 
+         "list" -> bindTips(Tip findNotByUser User.currentUser filter {
+                     _.game.obj map { _.date.is before timeNow } openOr false
+                   }))
   }
 
   def edit(xhtml: NodeSeq) = {
@@ -68,7 +71,7 @@ class Tips {
       newTip
     }
     def handleSave() {
-      if (notYetStarted_?(tip.game.obj)) tip.save
+      if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
       S redirectTo "."
     }
