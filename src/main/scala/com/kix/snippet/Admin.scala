@@ -31,10 +31,12 @@ class Admin {
          "results" -> Result.findAll.size,
          "tipsters" -> User.tipsters.size,
          "tips" -> Tip.findAll.size)
-         
-  def reset(xhtml: NodeSeq) = submit(?("Reset"), doReset)
 
   def init(xhtml: NodeSeq) = submit(?("Init"), doInit)
+
+  def init4Testing(xhtml: NodeSeq) = submit(?("Init for Testing"), doInit4Testing)
+         
+  def reset(xhtml: NodeSeq) = submit(?("Reset"), doReset)
 
   private def doReset() {
     Tip.bulkDelete_!!()
@@ -47,5 +49,10 @@ class Admin {
   private def doInit() {
     doReset()
     Initializer.initTeamsAndGames()
+  }
+
+  private def doInit4Testing() {
+    doReset()
+    Initializer.initTeamsAndGames4Testing()
   }
 }

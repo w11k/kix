@@ -21,9 +21,9 @@ import java.util._
 import java.text._
 import DateFormat._
 import net.liftweb.util._
-import TimeHelpers.timeNow
+import TimeHelpers.now
 
-object Util {
+object DateHelpers {
 
   val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"
 
@@ -38,8 +38,6 @@ object Util {
 
   implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
   
-  def notYetStarted_?(game: Box[Game]) = game map { _.date.is after timeNow } openOr false
-
   private def dateFormat(pattern: String) = new SimpleDateFormat(pattern)
 
   private def dateFormat(locale: Locale) = getDateTimeInstance(SHORT, SHORT, locale)

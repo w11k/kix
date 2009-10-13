@@ -15,8 +15,8 @@
  */
 package com.kix.snippet
 
-import lib.ImgHelper
-import lib.Util.format
+import lib.DateHelpers._
+import lib.ImgHelpers._
 import model._
 import net.liftweb.http._
 import S._
@@ -60,17 +60,17 @@ class Games {
   }
 
   private def bindGames(games: List[Game], xhtml: NodeSeq) = {
-    def bindTip(game: Game) =
-      if (game.date after timeNow)
+    def bindAction(game: Game) =
+      if (game.date after now)
         Tip.findByUserAndGame(User.currentUser, game) match {
           case Full(tip) => Tips editDelete tip 
           case _ => Tips create game
         }
       else
-        ImgHelper.right
+        rightImg
     games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
-           "tip" -> (if (User.loggedIn_?) bindTip(game) else NodeSeq.Empty),
+           "action" -> (if (User.loggedIn_?) bindAction(game) else NodeSeq.Empty),
            "date" -> format(game.date.is, locale),
            "group" -> game.group.is.toString,
            "location" -> game.location.is,

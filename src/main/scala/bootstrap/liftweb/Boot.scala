@@ -16,7 +16,8 @@
 package bootstrap.liftweb
 
 import com.kix.model._
-import com.kix.lib._
+import com.kix.lib.SessionLocale
+import com.kix.lib.DateHelpers._
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
 import net.liftweb.http._
@@ -42,11 +43,11 @@ class Boot {
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }
 
     LiftRules.formatDate = 
-      date => Util.format(if (date != null) date else new Date(), S.locale)
+      date => format(if (date != null) date else new Date(), S.locale)
 
     LiftRules.parseDate = s => s match {
       case null => Empty
-      case s    => Util.parse(s, S.locale)
+      case s    => parse(s, S.locale)
     }
 
     // Use com.kix to resolve snippets and views

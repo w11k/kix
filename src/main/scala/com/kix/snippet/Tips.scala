@@ -15,9 +15,10 @@
  */
 package com.kix.snippet
 
-import lib.ImgHelper
-import lib.Util._
+import lib.DateHelpers._
+import lib.ImgHelpers._
 import model._
+import Game.notYetStarted_?
 import net.liftweb.http._
 import S.{?, locale}
 import SHtml._
@@ -31,25 +32,28 @@ object Tips {
 
   object currentGame extends RequestVar[Box[Game]](Empty)
 
-  def editDelete(tip: Tip) = 
-    link("/tips/edit", () => Tips.currentTip(Full(tip)), ImgHelper.edit) ++
-      Text("") ++
-      link(".", () => tip.delete_!, ImgHelper.delete)
+  def create(game: Game) =
+    link("/tips/create", () => Tips.currentGame(Full(game)), createImg)
 
-  def create(game: Game) = {
-    Tips.currentGame(Full(game))
-    link("/tips/create", () => (), ImgHelper.create)
-  }
+  def editDelete(tip: Tip) = 
+    link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
+      Text("") ++
+      link(".", () => tip.delete_!, deleteImg)
 }
 
 class Tips {
 
   def myTips(xhtml: NodeSeq) = {
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
+      def bindAction(game: Box[Game]) =
+        if (User.loggedIn_?) 
+          if(notYetStarted_?(game)) Tips.editDelete(tip)
+          else rightImg
+        else
+          NodeSeq.Empty 
       val game = tip.game.obj
       bind("tip", chooseTemplate("template", "tip", xhtml),
-           "edit-delete" -> (if (notYetStarted_?(game)) Tips.editDelete(tip) 
-                             else NodeSeq.Empty),
+           "action" -> bindAction(game),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tip" -> tip.goals)
@@ -68,7 +72,7 @@ class Tips {
     }
     bind("tips", xhtml, 
          "list" -> bindTips(Tip findNotByUser User.currentUser filter {
-                     _.game.obj map { _.date.is before timeNow } openOr false
+                     _.game.obj map { _.date.is before now } openOr false
                    }))
   }
 

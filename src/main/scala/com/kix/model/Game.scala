@@ -20,7 +20,7 @@ import net.liftweb.http.S.?
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
 import net.liftweb.util._
-import net.liftweb.util.Helpers.timeNow
+import net.liftweb.util.Helpers.now
 import scala.xml.Text
 
 /**
@@ -34,18 +34,21 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
 
   override def showAllMenuDisplayName = ?("Games")
 
-  def upcoming = findAll(By_>(date, timeNow), 
+  def upcoming = findAll(By_>(date, now), 
                          OrderBy(date, Ascending),
                          OrderBy(group, Ascending))
 
-  def upcoming(n: Int) = findAll(By_>(date, timeNow), 
+  def upcoming(n: Int) = findAll(By_>(date, now), 
                                  OrderBy(date, Ascending),
                                  OrderBy(group, Ascending),
                                  MaxRows(n))
 
-  def past = findAll(By_<(date, timeNow), 
+  def past = findAll(By_<(date, now), 
                      OrderBy(date, Ascending),
                      OrderBy(group, Ascending))
+
+  def notYetStarted_?(game: Box[Game]) =
+    game map { _.date.is after now } openOr false
 }
 
 /**

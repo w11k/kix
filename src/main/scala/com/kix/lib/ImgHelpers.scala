@@ -17,20 +17,20 @@ package com.kix.lib
 
 import net.liftweb.http.S.?
 
-object ImgHelper {
+object ImgHelpers {
 
   def img(path: String, title: => String) =
     <img src={ path } title={ title } alt={ title } />
 
-  def  create = img("/images/create.png", ?("Create"))
+  def  createImg = img("/images/create.png", ?("Create"))
 
-  def  edit = img("/images/edit.png", ?("Edit"))
+  def  editImg = img("/images/edit.png", ?("Edit"))
 
-  def  delete = img("/images/delete.png", ?("Delete"))
+  def  deleteImg = img("/images/delete.png", ?("Delete"))
 
-  def  top = img("/images/top.png", "")
+  def  topImg = img("/images/top.png", "")
 
-  def  right = img("/images/right.png", "")
+  def  rightImg = img("/images/right.png", "")
 
-  def  down = img("/images/down.png", "")
+  def  downImg = img("/images/down.png", "")
 }
