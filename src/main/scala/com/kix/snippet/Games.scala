@@ -62,7 +62,7 @@ class Games {
   private def bindGames(games: List[Game], xhtml: NodeSeq) = {
     def bindAction(game: Game) =
       if (game.date after now)
-        Tip.findByUserAndGame(User.currentUser, game) match {
+        Tip.findByUserAndGameId(User.currentUser, game.id.is) match {
           case Full(tip) => Tips editDelete tip 
           case _ => Tips create game
         }

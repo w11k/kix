@@ -1,5 +1,5 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <div><lift:Games.upcoming5>
+  <div>
     <h3 class="alt"><lift:loc>Upcoming Games</lift:loc></h3>
     <table>
       <tr>
@@ -9,17 +9,19 @@
         <th><lift:loc>Location</lift:loc></th>
         <th><lift:loc>Game</lift:loc></th>
       </tr>
-      <games:list>
-        <template:game>
-          <tr>
-            <td><game:action /></td>
-            <td><game:date /></td>
-            <td><game:group /></td>
-            <td><game:location /></td>
-            <td><game:teams /></td>
-          </tr>
-        </template:game>
-      </games:list>
+      <lift:Games.upcoming5>
+        <games:list>
+          <template:game>
+            <tr>
+              <td><game:action /></td>
+              <td><game:date /></td>
+              <td><game:group /></td>
+              <td><game:location /></td>
+              <td><game:teams /></td>
+            </tr>
+          </template:game>
+        </games:list>
+      </lift:Games.upcoming5>
     </table>
-  </lift:Games.upcoming5></div>
+  </div>
 </lift:surround>

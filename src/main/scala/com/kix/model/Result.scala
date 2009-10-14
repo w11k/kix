@@ -18,6 +18,8 @@ package com.kix.model
 import lib._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
+import net.liftweb.util._
+import net.liftweb.util.Helpers._
 
 /**
  * Helper for a persistent result.
@@ -31,6 +33,31 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
   override def displayName = ?("Result")
 
   override def showAllMenuDisplayName = ?("Results")
+
+  override def afterSave = updatePoints _ :: super.afterSave
+
+  private def updatePoints(result: Result) {
+    def points(tip: Tip) = {
+      val r = result.goals1.is - result.goals2.is
+      val t = tip.goals1.is -tip.goals2.is
+      (t - r) match {
+        case 0 if tip.goals1.is == result.goals1.is => 5
+        case 0 => 4
+        case x if r * t > 0 => 3
+        case _ => 0
+      }
+    }
+    User.findAll foreach { user =>
+      Tip.findByUserAndGameId(Full(user), result.game.is)  map { t => 
+        points(t) match {
+          case 0 => false
+          case p =>
+            Log info "Added %s points for tipster %s.".format(p, user.shortName)
+            user.points(user.points.is + p).save
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -38,7 +65,14 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
  */
 class Result extends LongKeyedMapper[Result] with IdPK {
 
-  object game extends MappedGame(this)
+  object game extends MappedGame(this) {
+    override def selectableGames = {
+      val gamesWithResult = Result.findAll map { _.game.is }
+      Game.findAll filter { game =>
+        !(gamesWithResult contains game.id.is) && game.date.before(now)
+      }
+    }
+  }
 
   object goals1 extends MappedRange(this, Result.GoalRange) {
     override def displayName = ?("Goals Team 1") 

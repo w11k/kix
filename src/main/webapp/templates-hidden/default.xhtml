@@ -34,18 +34,16 @@
 			        <th><lift:loc>Name</lift:loc></th>
 			        <th><lift:loc>Points</lift:loc></th>
 			      </tr>
-			      <tr>
-			        <td>Jörn</td>
-			        <td>35</td>
-			      </tr>
-			      <tr>
-			        <td>Stephan</td>
-			        <td>13</td>
-			      </tr>
-			      <tr>
-			        <td>Heiko</td>
-			        <td>11</td>
-			      </tr>
+            <lift:Users.top3>
+              <users:list>
+                <template:user>
+                  <tr>
+                    <td><user:name /></td>
+                    <td><user:points /></td>
+                  </tr>
+                </template:user>
+              </users:list>
+            </lift:Users.top3>
 			    </table>
 			  </div>
       </div>

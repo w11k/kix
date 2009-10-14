@@ -38,9 +38,14 @@ object User extends User with MetaMegaProtoUser[User] {
 
   override def changePasswordXhtml = surround(super.changePasswordXhtml)
 
-  def tipsters = findAll(NotBy(superUser, true))
+  override def findAll = findAll(Nil: _*)
 
-  def deleteAllTipsters() = bulkDelete_!!(NotBy(superUser, true))
+  override def findAll(by: QueryParam[User]*) =
+    super.findAll((NotBy(superUser, true) :: by.toList): _*)
+
+  def top(n: Int) = findAll(OrderBy(points, Ascending), MaxRows(n))
+
+  def deleteAll() = bulkDelete_!!(NotBy(superUser, true))
 
   def eventuallyCreateAdmin() {
     if (find(By(email, "admin@kix.com")).isEmpty) {
@@ -66,4 +71,6 @@ object User extends User with MetaMegaProtoUser[User] {
 class User extends MegaProtoUser[User] {
 
   override def getSingleton = User
+
+  object points extends MappedInt(this)
 }

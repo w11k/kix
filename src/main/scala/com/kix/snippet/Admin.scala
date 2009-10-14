@@ -29,7 +29,7 @@ class Admin {
          "teams" -> Team.findAll.size,
          "games" -> Game.findAll.size,
          "results" -> Result.findAll.size,
-         "tipsters" -> User.tipsters.size,
+         "tipsters" -> User.findAll.size,
          "tips" -> Tip.findAll.size)
 
   def init(xhtml: NodeSeq) = submit(?("Init"), doInit)
@@ -40,7 +40,7 @@ class Admin {
 
   private def doReset() {
     Tip.bulkDelete_!!()
-    User.deleteAllTipsters()
+    User.deleteAll()
     Result.bulkDelete_!!()
     Game.bulkDelete_!!()
     Team.bulkDelete_!!()
