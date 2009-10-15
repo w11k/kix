@@ -48,12 +48,13 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
       }
     }
     User.findAll foreach { user =>
-      Tip.findByUserAndGameId(Full(user), result.game.is)  map { t => 
-        points(t) match {
-          case 0 => false
-          case p =>
-            Log info "Added %s points for tipster %s.".format(p, user.shortName)
-            user.points(user.points.is + p).save
+      Tip.findByUserAndGameId(Full(user), result.game.is) map { tip => 
+        points(tip) match {
+          case 0 =>
+          case x =>
+            tip.points(x).save
+            user.points(user.points.is + x).save
+            Log info "Added %s points for tipster %s.".format(x, user.shortName)
         }
       }
     }

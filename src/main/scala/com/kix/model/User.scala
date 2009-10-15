@@ -43,7 +43,9 @@ object User extends User with MetaMegaProtoUser[User] {
   override def findAll(by: QueryParam[User]*) =
     super.findAll((NotBy(superUser, true) :: by.toList): _*)
 
-  def top(n: Int) = findAll(OrderBy(points, Ascending), MaxRows(n))
+  def top(n: Int) = findAll(By_>(points, 0), 
+                            OrderBy(points, Ascending), 
+                            MaxRows(n))
 
   def deleteAll() = bulkDelete_!!(NotBy(superUser, true))
 

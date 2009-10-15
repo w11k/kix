@@ -61,6 +61,8 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object goals2 extends MappedRange(this, Result.GoalRange)
 
+  object points extends MappedInt(this)
+
   def goals = goals1.is + " : " + goals2.is
 
   def toForm =

@@ -35,7 +35,7 @@ private[snippet] object Games {
     val Past = Value("past")
   }
 
-  val DateRanges = (for (d <- DateRange) yield (d.id.toString, ?(d.toString))).toList
+  def dateRanges = (for (d <- DateRange) yield (d.id.toString, ?(d.toString))).toList
 }
 
 import Games._
@@ -53,7 +53,7 @@ class Games {
       case DateRange.Past => Game.past
     }
     bind("games", xhtml,
-         "date-range" -> select(DateRanges, Full(currentDateRange.is.id.toString), 
+         "date-range" -> select(dateRanges, Full(currentDateRange.is.id.toString), 
                                 s => currentDateRange(DateRange(s.toInt)), 
                                 "onchange" -> "submit();"),
          "list" -> bindGames(findForDateRange(currentDateRange.is), xhtml))
@@ -61,13 +61,12 @@ class Games {
 
   private def bindGames(games: List[Game], xhtml: NodeSeq) = {
     def bindAction(game: Game) =
-      if (game.date after now)
-        Tip.findByUserAndGameId(User.currentUser, game.id.is) match {
-          case Full(tip) => Tips editDelete tip 
-          case _ => Tips create game
-        }
-      else
-        rightImg
+      (Tip.findByUserAndGameId(User.currentUser, game.id.is), game.date after now) match {
+        case (Full(tip), true)  => Tips editDelete tip
+        case (Full(tip), false) => Tips points tip
+        case (Empty, true)      => Tips create game
+        case _                  => NodeSeq.Empty
+      }
     games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
            "action" -> (if (User.loggedIn_?) bindAction(game) else NodeSeq.Empty),

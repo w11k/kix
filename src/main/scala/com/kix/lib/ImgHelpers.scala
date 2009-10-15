@@ -22,15 +22,18 @@ object ImgHelpers {
   def img(path: String, title: => String) =
     <img src={ path } title={ title } alt={ title } />
 
-  def  createImg = img("/images/create.png", ?("Create"))
+  def createImg = img("/images/create.png", ?("Create Tip"))
 
-  def  editImg = img("/images/edit.png", ?("Edit"))
+  def editImg = img("/images/edit.png", ?("Edit Tip"))
 
-  def  deleteImg = img("/images/delete.png", ?("Delete"))
+  def deleteImg = img("/images/delete.png", ?("Delete Tip"))
 
-  def  topImg = img("/images/top.png", "")
+  def fiveImg = img("/images/up.png", ?("Five Points")) ++
+                img("/images/up.png", ?("Five Points"))
 
-  def  rightImg = img("/images/right.png", "")
+  def fourImg = img("/images/up.png", ?("Four Points"))
 
-  def  downImg = img("/images/down.png", "")
+  def threeImg = img("/images/right.png", ?("Three Points"))
+
+  def zeroImg = img("/images/down.png", ?("Zero Points"))
 }

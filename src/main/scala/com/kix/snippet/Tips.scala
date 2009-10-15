@@ -39,6 +39,13 @@ object Tips {
     link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
       Text("") ++
       link(".", () => tip.delete_!, deleteImg)
+
+  def points(tip: Tip) = tip.points.is match {
+    case 5 => fiveImg
+    case 4 => fourImg
+    case 3 => threeImg
+    case _ => zeroImg
+  }
 }
 
 class Tips {
@@ -48,7 +55,7 @@ class Tips {
       def bindAction(game: Box[Game]) =
         if (User.loggedIn_?) 
           if(notYetStarted_?(game)) Tips.editDelete(tip)
-          else rightImg
+          else Tips.points(tip)
         else
           NodeSeq.Empty 
       val game = tip.game.obj
