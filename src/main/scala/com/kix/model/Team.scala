@@ -33,7 +33,8 @@ object Team extends Team with LongKeyedMetaMapper[Team] with SuperCRUDify[Long, 
 
   override def showAllMenuDisplayName = ?("Teams")
 
-  def findByGroup(group: Group.Value) = findAll(By(Team.group, group))
+  def findByGroup(group: Group.Value) = findAll(By(Team.group, group),
+                                                OrderBy(Team.points, Descending))
 }
 
 /**
@@ -48,6 +49,18 @@ class Team extends LongKeyedMapper[Team] with IdPK {
   object name extends MappedString(this, 100) {
     override def displayName = ?("Name") 
   }
+
+  object wins extends MappedInt(this)
+
+  object draws extends MappedInt(this)
+
+  object losses extends MappedInt(this)
+
+  object points extends MappedInt(this)
+
+  object posGoals extends MappedInt(this)
+
+  object negGoals extends MappedInt(this)
 
   override def getSingleton = Team
 }

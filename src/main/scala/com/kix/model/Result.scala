@@ -34,9 +34,16 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
 
   override def showAllMenuDisplayName = ?("Results")
 
-  override def afterSave = updatePoints _ :: super.afterSave
+  override def afterSave = updatePointsAndTeams _ :: super.afterSave
 
-  private def updatePoints(result: Result) {
+  def findByGameId(gameId: Long) = find(By(game, gameId)) 
+
+//  def findByGroup(group: Group.Value) = {
+//    val games = Game findAll By(Game.group, group) map { _.id.is }
+//    findAll filter { result => games contains result.game.is }
+//  }
+
+  private def updatePointsAndTeams(result: Result) {
     def points(tip: Tip) = {
       val r = result.goals1.is - result.goals2.is
       val t = tip.goals1.is -tip.goals2.is
@@ -47,6 +54,8 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
         case _ => 0
       }
     }
+    def inc1(m: MappedInt[Team]) { inc(m, 1) }
+    def inc(m: MappedInt[Team], x: Int) { m(m.is + x) }
     User.findAll foreach { user =>
       Tip.findByUserAndGameId(Full(user), result.game.is) map { tip => 
         points(tip) match {
@@ -56,6 +65,35 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
             user.points(user.points.is + x).save
             Log info "Added %s points for tipster %s.".format(x, user.shortName)
         }
+      }
+    }
+    Log info "XXX"
+    for (game <- Game find result.game.is) {
+      Log info "XXX Game" + game.name
+      for (team1 <- game.team1.obj; team2 <- game.team2.obj) {
+        Log info "XXX Team1" + team1.name
+        Log info "XXX Team2" + team2.name
+        inc(team1.posGoals, result.goals1.is)
+        inc(team1.negGoals, result.goals2.is)
+        inc(team2.posGoals, result.goals2.is)
+        inc(team2.negGoals, result.goals1.is)
+        (result.goals1.is - result.goals2.is) match {
+          case 0 => 
+            inc1(team1.draws)
+            inc1(team2.draws)
+            inc1(team1.points)
+            inc1(team2.points)
+          case x if (x>0) => 
+            inc1(team1.wins)
+            inc1(team2.losses)
+            inc(team1.points, 3)
+          case _ =>
+            inc1(team2.wins)
+            inc1(team1.losses)
+            inc(team2.points, 3)
+        }
+        team1.save
+        team2.save
       }
     }
   }
@@ -82,6 +120,8 @@ class Result extends LongKeyedMapper[Result] with IdPK {
   object goals2 extends MappedRange(this, Result.GoalRange) {
     override def displayName = ?("Goals Team 2") 
   }
+
+  def goals = goals1.is + " : " + goals2.is
 
   override def getSingleton = Result
 }

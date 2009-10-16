@@ -58,8 +58,11 @@ class Boot {
     
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
 
+    val gamesSubMenus = Menu(Loc("groups", ("games" :: "groups" :: Nil) -> false, 
+                             ?("Groups")))
     val gamesMenu = Menu(Loc("games", ("games" :: "index" :: Nil) -> false, 
-                             ?("Games and Groups"))) :: Nil
+                             ?("Games and Groups")),
+                    gamesSubMenus) :: Nil
 
     val tipsSubMenus = Menu(Loc("tips.create", ("tips" :: "create" :: Nil) -> false, 
                                ?("Create Tip"))) :: 

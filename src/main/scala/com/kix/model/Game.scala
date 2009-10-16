@@ -47,6 +47,9 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
                      OrderBy(date, Ascending),
                      OrderBy(group, Ascending))
 
+  def findByGroup(group: Group.Value) = findAll(By(Game.group, group), 
+                                                OrderBy(date, Ascending))
+
   def notYetStarted_?(game: Box[Game]) =
     game map { _.date.is after now } openOr false
 }
