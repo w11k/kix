@@ -38,11 +38,6 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
 
   def findByGameId(gameId: Long) = find(By(game, gameId)) 
 
-//  def findByGroup(group: Group.Value) = {
-//    val games = Game findAll By(Game.group, group) map { _.id.is }
-//    findAll filter { result => games contains result.game.is }
-//  }
-
   private def updatePointsAndTeams(result: Result) {
     def points(tip: Tip) = {
       val r = result.goals1.is - result.goals2.is
@@ -56,7 +51,7 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
     }
     def inc1(m: MappedInt[Team]) { inc(m, 1) }
     def inc(m: MappedInt[Team], x: Int) { m(m.is + x) }
-    User.findAll foreach { user =>
+    User.all() foreach { user =>
       Tip.findByUserAndGameId(Full(user), result.game.is) map { tip => 
         points(tip) match {
           case 0 =>

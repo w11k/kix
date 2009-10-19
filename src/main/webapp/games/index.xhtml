@@ -1,5 +1,5 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <lift:Games.find form="post">
+  <lift:Games.forDateRange form="post">
     <h3 class="alt"><lift:loc>Match Schedule</lift:loc></h3>
     <div><lift:loc>Show</lift:loc>&nbsp;<games:date-range/></div>
     <table>
@@ -11,16 +11,14 @@
         <th><lift:loc>Game</lift:loc></th>
       </tr>
       <games:list>
-        <template:game>
-          <tr>
-            <td><game:action /></td>
-            <td><game:date /></td>
-            <td><game:group /></td>
-            <td><game:location /></td>
-            <td><game:teams /></td>
-          </tr>
-        </template:game>
+        <tr>
+          <td><game:action /></td>
+          <td><game:date /></td>
+          <td><game:group /></td>
+          <td><game:location /></td>
+          <td><game:teams /></td>
+        </tr>
       </games:list>
     </table>
-  </lift:Games.find>
+  </lift:Games.forDateRange>
 </lift:surround>

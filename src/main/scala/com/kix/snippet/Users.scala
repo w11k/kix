@@ -23,7 +23,7 @@ class Users {
 
   def top3(xhtml: NodeSeq) = {
     def bindUsers(tips: List[User]) = tips flatMap { user =>
-      bind("user", chooseTemplate("template", "user", xhtml),
+      bind("user", chooseTemplate("users", "list", xhtml),
            "name" -> user.shortName,
            "points" -> user.points.is)
     }

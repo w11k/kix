@@ -26,6 +26,16 @@ import net.liftweb.util._
 import Helpers._
 import scala.xml.NodeSeq
 
+object Groups {
+   
+   private object currentGroup extends RequestVar[Group.Value](Group.A)
+   
+   private val Groups4Select =
+     Group map { group => (group.id.toString, group.toString) } toList
+}
+
+import Groups._
+
 class Groups {
 
   def games(xhtml: NodeSeq) = {
@@ -34,7 +44,7 @@ class Groups {
     def bindTeams(teams: List[Team]) = teams flatMap { team =>
       if (team.points.is < lastPoints) position += 1
       lastPoints = team.points.is
-      bind("team", chooseTemplate("template", "team", xhtml),
+      bind("team", chooseTemplate("groups", "team-list", xhtml),
            "position" -> position,
            "name" -> team.name.is,
            "points" -> team.points.is,
@@ -46,8 +56,8 @@ class Groups {
     }
     def bindGames(games: List[Game]) = {
       games flatMap { game =>
-        bind("game", chooseTemplate("template", "game", xhtml),
-             "action" -> (if (User.loggedIn_?) Games.bindAction(game) else NodeSeq.Empty),
+        bind("game", chooseTemplate("groups", "game-list", xhtml),
+             "action" -> (if (User.loggedIn_?) Games bindAction game else NodeSeq.Empty),
              "date" -> format(game.date.is, locale),
              "location" -> game.location.is,
              "teams" -> game.name,
@@ -56,14 +66,9 @@ class Groups {
     }
     bind("groups", xhtml,
          "group" -> select(Groups4Select, Full(currentGroup.is.id.toString), 
-                                s => currentGroup(Group(s.toInt)), 
-                                "onchange" -> "submit();"),
+                           s => currentGroup(Group(s.toInt)), 
+                           "onchange" -> "submit();"),
          "team-list" -> bindTeams(Team findByGroup currentGroup.is),
          "game-list" -> bindGames(Game findByGroup currentGroup.is))
   }
-
-  private object currentGroup extends RequestVar[Group.Value](Group.A)
-
-  private val Groups4Select =
-    Group map { group => (group.id.toString, group.toString) } toList
 }

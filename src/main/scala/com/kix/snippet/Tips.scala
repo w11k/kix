@@ -30,10 +30,6 @@ import scala.xml.{NodeSeq, Text}
 
 object Tips {
 
-  object currentTip extends RequestVar[Box[Tip]](Empty)
-
-  object currentGame extends RequestVar[Box[Game]](Empty)
-
   def create(game: Game) =
     link("/tips/create", () => Tips.currentGame(Full(game)), createImg)
 
@@ -59,6 +55,10 @@ object Tips {
     case 3 => threeImg
     case _ => zeroImg
   }
+  
+  private object currentTip extends RequestVar[Box[Tip]](Empty)
+  
+  private object currentGame extends RequestVar[Box[Game]](Empty)
 
   private def doEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
     link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
@@ -77,7 +77,7 @@ class Tips {
         else
           NodeSeq.Empty 
       val game = tip.game.obj
-      bind("tip", chooseTemplate("template", "tip", xhtml),
+      bind("tip", chooseTemplate("tips", "list", xhtml),
            "action" -> bindAction(game),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
@@ -92,7 +92,7 @@ class Tips {
   def otherTips(xhtml: NodeSeq) = {
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
-      bind("tip", chooseTemplate("template", "tip", xhtml),
+      bind("tip", chooseTemplate("tips", "list", xhtml),
            "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),

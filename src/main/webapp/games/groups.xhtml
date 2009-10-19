@@ -15,18 +15,16 @@
         <th><lift:loc>NG</lift:loc></th>
       </tr>
       <groups:team-list>
-        <template:team>
-          <tr>
-            <td><team:position /></td>
-            <td><team:name /></td>
-            <td><team:points /></td>
-            <td><team:wins /></td>
-            <td><team:draws /></td>
-            <td><team:losses /></td>
-            <td><team:posGoals /></td>
-            <td><team:negGoals /></td>
-          </tr>
-        </template:team>
+        <tr>
+          <td><team:position /></td>
+          <td><team:name /></td>
+          <td><team:points /></td>
+          <td><team:wins /></td>
+          <td><team:draws /></td>
+          <td><team:losses /></td>
+          <td><team:posGoals /></td>
+          <td><team:negGoals /></td>
+        </tr>
       </groups:team-list>
     </table>
     <hr />
@@ -40,15 +38,13 @@
         <th><lift:loc>Result</lift:loc></th>
       </tr>
       <groups:game-list>
-        <template:game>
-          <tr>
-            <td><game:action /></td>
-            <td><game:date /></td>
-            <td><game:location /></td>
-            <td><game:teams /></td>
-            <td><game:result /></td>
-          </tr>
-        </template:game>
+        <tr>
+          <td><game:action /></td>
+          <td><game:date /></td>
+          <td><game:location /></td>
+          <td><game:teams /></td>
+          <td><game:result /></td>
+        </tr>
       </groups:game-list>
     </table>
   </lift:Groups.games>

@@ -25,7 +25,7 @@ import net.liftweb.util._
 import Helpers._
 import scala.xml.NodeSeq
 
-private[snippet] object Games {
+object Games {
 
   object currentDateRange extends RequestVar(DateRange.Upcoming)
 
@@ -56,9 +56,9 @@ class Games {
     bind("games", xhtml, "list" -> bindGames(Game upcoming 5, xhtml))
   }
 
-  def find(xhtml: NodeSeq) = {
+  def forDateRange(xhtml: NodeSeq) = {
     def findForDateRange(dateRange: DateRange.Value) = dateRange match {
-      case DateRange.All => Game.findAll
+      case DateRange.All => Game.all
       case DateRange.Upcoming => Game.upcoming
       case DateRange.Past => Game.past
     }
@@ -71,7 +71,7 @@ class Games {
 
   private def bindGames(games: List[Game], xhtml: NodeSeq) = {
     games flatMap { game =>
-      bind("game", chooseTemplate("template", "game", xhtml),
+      bind("game", chooseTemplate("games", "list", xhtml),
            "action" -> (if (User.loggedIn_?) bindAction(game) else NodeSeq.Empty),
            "date" -> format(game.date.is, locale),
            "group" -> game.group.is.toString,

@@ -34,6 +34,9 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
 
   override def showAllMenuDisplayName = ?("Games")
 
+  def all = findAll(OrderBy(date, Ascending),
+                    OrderBy(group, Ascending))
+
   def upcoming = findAll(By_>(date, now), 
                          OrderBy(date, Ascending),
                          OrderBy(group, Ascending))
