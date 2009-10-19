@@ -26,13 +26,15 @@ object User extends User with MetaMegaProtoUser[User] {
 
   override def signupFields = firstName :: lastName :: email :: password :: Nil
 
-  override def skipEmailValidation = true
+//  override def skipEmailValidation = true
 
   override def loginXhtml = surround(super.loginXhtml)
 
   override def signupXhtml(user: User) = surround(super.signupXhtml(user))
 
   override def lostPasswordXhtml = surround(super.lostPasswordXhtml)
+
+  override def passwordResetXhtml = surround(super.passwordResetXhtml)
 
   override def editXhtml(user: User) = surround(super.editXhtml(user))
 

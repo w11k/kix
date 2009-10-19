@@ -1,2 +1,8 @@
 db.driver=org.apache.derby.jdbc.ClientDriver
 db.url=jdbc:derby://localhost/kix;create=true
+mail.smtp.host=smtp.gmail.com
+mail.smtp.auth=true
+mail.smtp.starttls.enable=true
+mail.mime.charset=UTF-8
+#mail.user=kixwjaxchallenge@googlemail.com
+#mail.pwd=thewinnerislift

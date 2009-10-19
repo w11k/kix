@@ -20,6 +20,7 @@ import com.kix.lib.SessionLocale
 import com.kix.lib.DateHelpers._
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
+import javax.mail._
 import net.liftweb.http._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
@@ -83,6 +84,14 @@ class Boot {
                 adminMenu :::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)
+
+    // Configure Mailer
+    val user = Props get "mail.user" openOr "kixwjaxchallenge@googlemail.com"
+    val pwd = Props get "mail.pwd" openOr "thewinnerislift"
+    Mailer.authenticator = Full(new Authenticator {
+      override def getPasswordAuthentication =
+        new PasswordAuthentication(user , pwd)
+    })
 
     // Setup database
     DB.defineConnectionManager(DefaultConnectionIdentifier , DBVendor)
