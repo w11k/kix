@@ -16,17 +16,24 @@
 package com.kix.lib
 
 import net.liftweb.http.S.?
+import net.liftweb.http.js.JsExp
 
 object ImgHelpers {
 
   def img(path: String, title: => String) =
     <img src={ path } title={ title } alt={ title } />
 
+  def img(path: String, title: => String, onclick: JsExp) =
+    <img src={ path } title={ title } alt={ title } onclick={ onclick } />
+
   def createImg = img("/images/create.png", ?("Create Tip"))
 
   def editImg = img("/images/edit.png", ?("Edit Tip"))
 
   def deleteImg = img("/images/delete.png", ?("Delete Tip"))
+
+  def ajaxDeleteImg(onclick: (String, JsExp)) =
+    img("/images/delete.png", ?("Delete Tip"), onclick._2)
 
   def fiveImg = img("/images/up.png", ?("Five Points")) ++
                 img("/images/up.png", ?("Five Points"))

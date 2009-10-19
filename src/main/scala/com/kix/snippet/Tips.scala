@@ -22,6 +22,8 @@ import Game.notYetStarted_?
 import net.liftweb.http._
 import S.{?, locale}
 import SHtml._
+import js.JsCmd
+import js.JsCmds._
 import net.liftweb.util._
 import Helpers._
 import scala.xml.{NodeSeq, Text}
@@ -35,10 +37,21 @@ object Tips {
   def create(game: Game) =
     link("/tips/create", () => Tips.currentGame(Full(game)), createImg)
 
-  def editDelete(tip: Tip) = 
-    link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
-      Text("") ++
-      link(".", () => tip.delete_!, deleteImg)
+  def editDelete(tip: Tip, game: Game, action: Game => NodeSeq) = { 
+    def delete = {
+      Tip delete_! tip
+      SetHtml(game.id.is.toString, action(game))
+    }
+    doEditDelete(tip, delete _)
+  }
+
+  def editDelete(tip: Tip) = { 
+    def delete = {
+      Tip delete_! tip
+      SetHtml(tip.id.is.toString, NodeSeq.Empty)
+    }
+    doEditDelete(tip, delete _)
+  }
 
   def points(tip: Tip) = tip.points.is match {
     case 5 => fiveImg
@@ -46,16 +59,21 @@ object Tips {
     case 3 => threeImg
     case _ => zeroImg
   }
+
+  private def doEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
+    link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
+    Text("") ++
+    ajaxDeleteImg(ajaxInvoke(jsCmd))
 }
 
 class Tips {
 
   def myTips(xhtml: NodeSeq) = {
-    def bindTips(tips: List[Tip]) = tips flatMap { tip =>
+    def bindTip(tip: Tip) = {
       def bindAction(game: Box[Game]) =
         if (User.loggedIn_?) 
-          if(notYetStarted_?(game)) Tips.editDelete(tip)
-          else Tips.points(tip)
+          if(notYetStarted_?(game)) Tips editDelete tip
+          else Tips points tip
         else
           NodeSeq.Empty 
       val game = tip.game.obj
@@ -64,6 +82,9 @@ class Tips {
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tip" -> tip.goals)
+    }
+    def bindTips(tips: List[Tip]) = tips flatMap { tip =>
+      <tr id={ tip.id.is.toString }>{ bindTip(tip) }</tr>
     }
     bind("tips", xhtml, "list" -> bindTips(Tip findByUser User.currentUser))
   }

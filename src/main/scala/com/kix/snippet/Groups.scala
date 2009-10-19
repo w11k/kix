@@ -45,16 +45,9 @@ class Groups {
            "negGoals" -> team.negGoals.is)
     }
     def bindGames(games: List[Game]) = {
-      def bindAction(game: Game) =
-        (Tip.findByUserAndGameId(User.currentUser, game.id.is), game.date after now) match {
-          case (Full(tip), true)  => Tips editDelete tip
-          case (Full(tip), false) => Tips points tip
-          case (Empty, true)      => Tips create game
-          case _                  => NodeSeq.Empty
-        }
       games flatMap { game =>
         bind("game", chooseTemplate("template", "game", xhtml),
-             "action" -> (if (User.loggedIn_?) bindAction(game) else NodeSeq.Empty),
+             "action" -> (if (User.loggedIn_?) Games.bindAction(game) else NodeSeq.Empty),
              "date" -> format(game.date.is, locale),
              "location" -> game.location.is,
              "teams" -> game.name,

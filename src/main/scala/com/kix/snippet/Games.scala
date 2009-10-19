@@ -36,6 +36,16 @@ private[snippet] object Games {
   }
 
   def dateRanges = (for (d <- DateRange) yield (d.id.toString, ?(d.toString))).toList
+
+  def bindAction(game: Game): NodeSeq =
+    <span id={ game.id.is.toString }>{
+      (Tip.findByUserAndGameId(User.currentUser, game.id.is), game.date after now) match {
+        case (Full(tip), true)  => Tips.editDelete(tip, game, bindAction _)
+        case (Full(tip), false) => Tips points tip
+        case (Empty, true)      => Tips create game
+        case _                  => NodeSeq.Empty
+      }
+    }</span>
 }
 
 import Games._
@@ -60,13 +70,6 @@ class Games {
   }
 
   private def bindGames(games: List[Game], xhtml: NodeSeq) = {
-    def bindAction(game: Game) =
-      (Tip.findByUserAndGameId(User.currentUser, game.id.is), game.date after now) match {
-        case (Full(tip), true)  => Tips editDelete tip
-        case (Full(tip), false) => Tips points tip
-        case (Empty, true)      => Tips create game
-        case _                  => NodeSeq.Empty
-      }
     games flatMap { game =>
       bind("game", chooseTemplate("template", "game", xhtml),
            "action" -> (if (User.loggedIn_?) bindAction(game) else NodeSeq.Empty),
