@@ -38,7 +38,7 @@ class Boot {
       req => SessionLocale.is openOr LiftRules.defaultLocaleCalculator(req)
 
     // Add "messages.properties" resources
-    LiftRules.resourceNames = "Messages" :: Nil
+    LiftRules.resourceNames = "Messages" :: "Teams" :: Nil
 
     // Use UTF-8
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }

@@ -48,6 +48,7 @@ class Team extends LongKeyedMapper[Team] with IdPK {
 
   object name extends MappedString(this, 100) {
     override def displayName = ?("Name") 
+    override def is = ?(super.is)
   }
 
   object wins extends MappedInt(this)
