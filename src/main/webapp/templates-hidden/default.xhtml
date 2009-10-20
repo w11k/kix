@@ -12,15 +12,21 @@
 
   <body>
     <div class="container">
-      <div class="span-20">
-        <img src="/images/lift.png" alt="Lift Web Framework"/>
+      <div class="span-6">
+        <img src="/images/challenge.png"/>
+        <img src="/images/ajax-loader.gif" alt="" id="ajax-loader" style="display:none"/>
+      </div>
+      <div class="span-14">
+        <img src="/images/kix.png"/>
       </div>
       <div class="span-4 last" style="text-align: right;">
-        <img src="/images/ajax-loader.gif" alt="" id="ajax-loader" style="display:none"/>
         <lift:Locales/>
       </div>
       <hr/>
-      <div class="span-6">
+      <div class="span-5">
+        <div style="text-align: center;">
+          <img src="/images/logo.png" title="Built with the Lift Web Framework"/>
+        </div>
         <div class="menu">
           <lift:Menu.builder/>
         </div>
@@ -53,8 +59,9 @@
           </table>
         </div>
       </div>
-      <div class="span-1">&nbsp;</div>
-      <div class="span-17 last">
+      <div class="span-1">&nbsp;
+      </div>
+      <div class="span-18 last">
         <lift:Msgs>
           <lift:error_class>error</lift:error_class>
           <lift:notice_class>notice</lift:notice_class>
@@ -63,11 +70,14 @@
         <lift:bind name="content"/>
       </div>
       <hr/>
-      <div class="span-24 last" style="text-align: center;">
+      <div class="span-6">
+        &nbsp;
+      </div>
+      <div class="span-12" style="text-align: center;">
         <img src="/images/pbww.png"/>
-        <div>
-          <a href="http://www.nationalflaggen.de/">www.nationalflaggen.de</a>
-        </div>
+      </div>
+      <div class="span-6 last" style="text-align: right;">
+        <a href="http://www.nationalflaggen.de/" style="text-decoration: none; color: #777777">www.nationalflaggen.de</a>
       </div>
     </div>
   </body>

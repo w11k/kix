@@ -17,14 +17,21 @@ package com.kix.lib
 
 import net.liftweb.http.S.?
 import net.liftweb.http.js.JsExp
+import scala.xml._
 
 object ImgHelpers {
 
-  def img(path: String, title: => String) =
-    <img src={ path } title={ title } alt={ title } />
+  def img(src: String, title: => String, attribs: Tuple2[String, String]*) = {
+    def metaData = attribs.foldRight[MetaData](Null) { (t, m) => new UnprefixedAttribute(t._1, t._2, m) }
+    <img src={ src } title={ title } alt={ title } /> % metaData
+  }
 
-  def img(path: String, title: => String, onclick: JsExp) =
-    <img src={ path } title={ title } alt={ title } onclick={ onclick } />
+  def img(src: String, title: => String, onclick: JsExp) =
+    <img src={ src } title={ title } alt={ title } onclick={ onclick } />
+
+  def ensignImg(src: String, name: => String) =
+    if (src != null && !src.trim.isEmpty) img(src, name, "height" -> "10px")
+    else img("/images/unknown.png", ?("Ensign unknown"), "height" -> "10px")
 
   def createImg = img("/images/create.png", ?("Create Tip"))
 

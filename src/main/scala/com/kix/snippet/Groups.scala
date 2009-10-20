@@ -46,6 +46,7 @@ class Groups {
       lastPoints = team.points.is
       bind("team", chooseTemplate("groups", "team-list", xhtml),
            "position" -> position,
+           "ensign" -> ensignImg(team.ensignUrl.is, team.name.is),
            "name" -> team.name.is,
            "points" -> team.points.is,
            "wins" -> team.wins.is,

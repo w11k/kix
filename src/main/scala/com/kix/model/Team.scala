@@ -27,7 +27,7 @@ import scala.xml.Text
  */
 object Team extends Team with LongKeyedMetaMapper[Team] with SuperCRUDify[Long, Team] {
 
-  override def fieldOrder = List(group, name)
+  override def fieldOrder = List(group, name, ensignUrl)
 
   override def displayName = ?("Team")
 
@@ -49,6 +49,10 @@ class Team extends LongKeyedMapper[Team] with IdPK {
   object name extends MappedString(this, 100) {
     override def displayName = ?("Name") 
     override def is = ?(super.is)
+  }
+
+  object ensignUrl extends MappedString(this, 256) {
+    override def displayName = ?("Ensign URL") 
   }
 
   object wins extends MappedInt(this)

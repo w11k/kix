@@ -23,15 +23,9 @@ import net.liftweb.util.TimeHelpers._
 object Initializer {
 
   def initTeamsAndGames() {
-    def team(group: Group.Value, name: String) = {
-      val team = Team.create.group(group).name(name)
-      team.save
-      team
-    }
-    def date(dd: String, time: String) = "2010-06-%sT%sGMT+2:00".format(dd, time)
 
     // Group A
-    val a1 = team(A,"South Afrika")
+    val a1 = team(A, "South Afrika", "http://www.nationalflaggen.de/images/flaggen/flagge-suedafrika-flagge-rechteckig-10x15.gif")
     val a2 = team(A,"A2")
     val a3 = team(A,"A3")
     val a4 = team(A,"A4")
@@ -128,17 +122,10 @@ object Initializer {
   }
 
   def initTeamsAndGames4Testing() {
-    def team(group: Group.Value, name: String) = {
-      val team = Team.create.group(group).name(name)
-      team.save
-      team
-    }
-    def date(dd: String, time: String) = "2010-06-%sT%sGMT+2:00".format(dd, time)
-
     val now = TimeSpan(millis)
 
     // Group A
-    val a1 = team(A,"South Afrika")
+    val a1 = team(A, "South Afrika", "http://www.nationalflaggen.de/images/flaggen/flagge-suedafrika-flagge-rechteckig-10x15.gif")
     val a2 = team(A,"A2")
     val a3 = team(A,"A3")
     val a4 = team(A,"A4")
@@ -248,4 +235,18 @@ object Initializer {
   private val _P = "Polokwane"
   private val _NP = "Nelson Mandela Bay/Port Elizabeth"
   private val _T = "Tshwane/Pretoria"
+
+  private def team(group: Group.Value, name: String) = {
+    val team = Team.create.group(group).name(name)
+    team.save
+    team
+  }
+
+  private def team(group: Group.Value, name: String, ensignUrl: String) = {
+    val team = Team.create.group(group).name(name).ensignUrl(ensignUrl)
+    team.save
+    team
+  }
+
+  private def date(dd: String, time: String) = "2010-06-%sT%sGMT+2:00".format(dd, time)
 }
