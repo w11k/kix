@@ -58,28 +58,27 @@ class Boot {
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
     
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
-
-    val gamesSubMenus = Menu(Loc("groups", ("games" :: "groups" :: Nil) -> false, 
-                             ?("Groups")))
     val gamesMenu = Menu(Loc("games", ("games" :: "index" :: Nil) -> false, 
-                             ?("Games and Groups")),
-                    gamesSubMenus) :: Nil
-
-    val tipsSubMenus = Menu(Loc("tips.create", ("tips" :: "create" :: Nil) -> false, 
-                               ?("Create Tip"))) :: 
+                             ?("Match Schedule"))) :: Nil
+    val groupsMenu = Menu(Loc("groups", ("groups" :: "index" :: Nil) -> false, 
+                               ?("Groups"))) :: Nil
+    val tipsSubMenu = Menu(Loc("tips.create", ("tips" :: "create" :: Nil) -> false, 
+                                ?("Create Tip"), Hidden)) :: 
                        Menu(Loc("tips.edit", ("tips" :: "edit" :: Nil) -> false, 
-                               ?("Edit Tip"), Hidden)) ::
+                                ?("Edit Tip"), Hidden)) ::
                        Nil
-    val tipsMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, ?("Tips"), ifLoggedIn),
-                        tipsSubMenus: _*) :: Nil
+    val tipsMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, 
+                            ?("Tips"), ifLoggedIn),
+                        tipsSubMenu: _*) :: Nil
     
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
-    val adminSubMenus = Team.menus ::: Game.menus ::: Result.menus
+    val adminSubMenu = Team.menus ::: Game.menus ::: Result.menus
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
-                         adminSubMenus: _*) :: Nil
+                         adminSubMenu: _*) :: Nil
     
     val menus = homeMenu :::
                 gamesMenu :::
+                groupsMenu :::
                 tipsMenu :::
                 adminMenu :::
                 User.sitemap

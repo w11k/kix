@@ -16,7 +16,10 @@
 package com.kix.model
 
 import net.liftweb.mapper._
-import net.liftweb.util.Log
+import net.liftweb.http.S.??
+import net.liftweb.sitemap._
+import net.liftweb.sitemap.Loc._
+import net.liftweb.util._
 import scala.xml.NodeSeq
 
  /**
@@ -39,6 +42,13 @@ object User extends User with MetaMegaProtoUser[User] {
   override def editXhtml(user: User) = surround(super.editXhtml(user))
 
   override def changePasswordXhtml = surround(super.changePasswordXhtml)
+
+  override def lostPasswordMenuLoc =
+    Full(Menu(Loc("LostPassword", lostPasswordPath,
+                  ??("lost.password"),
+                  Template(() => wrapIt(lostPassword)),
+                  Hidden,
+                  If(notLoggedIn_? _, ??("logout.first"))))) // not logged in
 
   def all(by: QueryParam[User]*) =
     super.findAll((NotBy(superUser, true) :: by.toList): _*)
