@@ -1,43 +1,77 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <h3 class="alt"><lift:loc>My Tips</lift:loc></h3>
+  <h3 class="alt">
+    <lift:loc>My Tips</lift:loc>
+  </h3>
   <lift:Tips.myTips>
     <table>
       <thead>
         <tr>
-          <th><lift:loc>&nbsp;</lift:loc></th>
-          <th><lift:loc>Game</lift:loc></th>
-          <th><lift:loc>Date</lift:loc></th>
-          <th><lift:loc>Tip</lift:loc></th>
+          <th></th>
+          <th>
+            <lift:loc>Game</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Date</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Tip</lift:loc>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tips:list>
-          <td><tip:action /></td>
-          <td><tip:game /></td>
-          <td><tip:date /></td>
-          <td><tip:tip /></td>
+          <td>
+            <tip:action/>
+          </td>
+          <td>
+            <tip:game/>
+          </td>
+          <td>
+            <tip:date/>
+          </td>
+          <td>
+            <tip:tip/>
+          </td>
         </tips:list>
       </tbody>
     </table>
   </lift:Tips.myTips>
-  <h3 class="alt"><lift:loc>Tips from other Tipsters</lift:loc></h3>
+  <h3 class="alt">
+    <lift:loc>Tips from other Tipsters</lift:loc>
+  </h3>
   <lift:Tips.otherTips>
     <table>
       <thead>
         <tr>
-          <th><lift:loc>Tipster</lift:loc></th>
-          <th><lift:loc>Game</lift:loc></th>
-          <th><lift:loc>Date</lift:loc></th>
-          <th><lift:loc>Tip</lift:loc></th>
+          <th>
+            <lift:loc>Tipster</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Game</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Date</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Tip</lift:loc>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tips:list>
           <tr>
-            <td><tip:tipster /></td>
-            <td><tip:game /></td>
-            <td><tip:date /></td>
-            <td><tip:tip /></td>
+            <td>
+              <tip:tipster/>
+            </td>
+            <td>
+              <tip:game/>
+            </td>
+            <td>
+              <tip:date/>
+            </td>
+            <td>
+              <tip:tip/>
+            </td>
           </tr>
         </tips:list>
       </tbody>

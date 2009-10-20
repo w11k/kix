@@ -1,22 +1,45 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
   <lift:Games.forDateRange form="post">
-    <h3 class="alt"><lift:loc>Match Schedule</lift:loc></h3>
-    <div><lift:loc>Show</lift:loc>&nbsp;<games:date-range/></div>
+    <h3 class="alt">
+      <lift:loc>Match Schedule</lift:loc>
+    </h3>
+    <div>
+      <lift:loc>Show</lift:loc>&nbsp;
+      <games:date-range/>
+    </div>
     <table>
       <tr>
-        <th>&nbsp;</th>
-        <th><lift:loc>Date</lift:loc></th>
-        <th><lift:loc>Group</lift:loc></th>
-        <th><lift:loc>Location</lift:loc></th>
-        <th><lift:loc>Game</lift:loc></th>
+        <th></th>
+        <th>
+          <lift:loc>Date</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Group</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Location</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Game</lift:loc>
+        </th>
       </tr>
       <games:list>
         <tr>
-          <td><game:action /></td>
-          <td><game:date /></td>
-          <td><game:group /></td>
-          <td><game:location /></td>
-          <td><game:teams /></td>
+          <td>
+            <game:action/>
+          </td>
+          <td>
+            <game:date/>
+          </td>
+          <td>
+            <game:group/>
+          </td>
+          <td>
+            <game:location/>
+          </td>
+          <td>
+            <game:teams/>
+          </td>
         </tr>
       </games:list>
     </table>

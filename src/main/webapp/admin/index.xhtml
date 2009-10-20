@@ -1,51 +1,81 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
   <div>
-    <h3 class="alt"><lift:loc>Overview</lift:loc></h3>
+    <h3 class="alt">
+      <lift:loc>Overview</lift:loc>
+    </h3>
     <lift:Admin.overview>
       <table>
         <thead>
           <tr>
-            <th colspan="2"><lift:loc>Database Content</lift:loc></th>
+            <th colspan="2">
+              <lift:loc>Database Content</lift:loc>
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><lift:loc>Teams</lift:loc></td>
-            <td><overview:teams /></td>
+            <td>
+              <lift:loc>Teams</lift:loc>
+            </td>
+            <td>
+              <overview:teams/>
+            </td>
           </tr>
           <tr>
-            <td><lift:loc>Games</lift:loc></td>
-            <td><overview:games /></td>
+            <td>
+              <lift:loc>Games</lift:loc>
+            </td>
+            <td>
+              <overview:games/>
+            </td>
           </tr>
           <tr>
-            <td><lift:loc>Results</lift:loc></td>
-            <td><overview:results /></td>
+            <td>
+              <lift:loc>Results</lift:loc>
+            </td>
+            <td>
+              <overview:results/>
+            </td>
           </tr>
           <tr>
-            <td><lift:loc>Tipsters</lift:loc></td>
-            <td><overview:tipsters /></td>
+            <td>
+              <lift:loc>Tipsters</lift:loc>
+            </td>
+            <td>
+              <overview:tipsters/>
+            </td>
           </tr>
           <tr>
-            <td><lift:loc>Tips</lift:loc></td>
-            <td><overview:tips /></td>
+            <td>
+              <lift:loc>Tips</lift:loc>
+            </td>
+            <td>
+              <overview:tips/>
+            </td>
           </tr>
         </tbody>
       </table>
     </lift:Admin.overview>
   </div>
-  <hr />
+  <hr/>
   <div>
-    <h3 class="alt"><lift:loc>Initialize database</lift:loc></h3>
-    <lift:Admin.init form="post" />
+    <h3 class="alt">
+      <lift:loc>Initialize database</lift:loc>
+    </h3>
+    <lift:Admin.init form="post"/>
   </div>
-  <hr />
+  <hr/>
   <div>
-    <h3 class="alt"><lift:loc>Initialize database for Testing</lift:loc></h3>
-    <lift:Admin.init4Testing form="post" />
+    <h3 class="alt">
+      <lift:loc>Initialize database for Testing</lift:loc>
+    </h3>
+    <lift:Admin.init4Testing form="post"/>
   </div>
-  <hr />
+  <hr/>
   <div>
-    <h3 class="alt"><lift:loc>Reset database</lift:loc></h3>
-    <lift:Admin.reset form="post" />
+    <h3 class="alt">
+      <lift:loc>Reset database</lift:loc>
+    </h3>
+    <lift:Admin.reset form="post"/>
   </div>
 </lift:surround>

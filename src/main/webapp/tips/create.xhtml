@@ -1,18 +1,30 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <h3 class="alt"><lift:loc>Create Tip</lift:loc></h3>
+  <h3 class="alt">
+    <lift:loc>Create Tip</lift:loc>
+  </h3>
   <lift:Tips.create form="post">
     <table>
       <tr>
-        <td><lift:loc>Game</lift:loc></td>
-        <td><tip:game /></td>
+        <td>
+          <lift:loc>Game</lift:loc>
+        </td>
+        <td>
+          <tip:game/>
+        </td>
       </tr>
       <tr>
-        <td><lift:loc>Tip</lift:loc></td>
-        <td><tip:tip /></td>
+        <td>
+          <lift:loc>Tip</lift:loc>
+        </td>
+        <td>
+          <tip:tip/>
+        </td>
       </tr>
       <tr>
-        <td>&nbsp;</td>
-        <td><tip:save /></td>
+        <td></td>
+        <td>
+          <tip:save/>
+        </td>
       </tr>
     </table>
   </lift:Tips.create>

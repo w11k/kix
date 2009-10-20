@@ -1,49 +1,106 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
   <lift:Groups.games form="post">
-    <div><lift:loc>Group</lift:loc>&nbsp;<groups:group/></div>
-    <hr />
-    <h3 class="alt"><lift:loc>Table</lift:loc></h3>
+    <div>
+      <lift:loc>Group</lift:loc>&nbsp;
+      <groups:group/>
+    </div>
+    <hr/>
+    <h3 class="alt">
+      <lift:loc>Table</lift:loc>
+    </h3>
     <table>
       <tr>
-        <th><lift:loc>Pos.</lift:loc></th>
-        <th><lift:loc>Team</lift:loc></th>
-        <th><lift:loc>Pts.</lift:loc></th>
-        <th><lift:loc>W</lift:loc></th>
-        <th><lift:loc>D</lift:loc></th>
-        <th><lift:loc>L</lift:loc></th>
-        <th><lift:loc>PG</lift:loc></th>
-        <th><lift:loc>NG</lift:loc></th>
+        <th>
+          <lift:loc>Pos.</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Team</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Pts.</lift:loc>
+        </th>
+        <th>
+          <lift:loc>W</lift:loc>
+        </th>
+        <th>
+          <lift:loc>D</lift:loc>
+        </th>
+        <th>
+          <lift:loc>L</lift:loc>
+        </th>
+        <th>
+          <lift:loc>PG</lift:loc>
+        </th>
+        <th>
+          <lift:loc>NG</lift:loc>
+        </th>
       </tr>
       <groups:team-list>
         <tr>
-          <td><team:position /></td>
-          <td><team:name /></td>
-          <td><team:points /></td>
-          <td><team:wins /></td>
-          <td><team:draws /></td>
-          <td><team:losses /></td>
-          <td><team:posGoals /></td>
-          <td><team:negGoals /></td>
+          <td>
+            <team:position/>
+          </td>
+          <td>
+            <team:name/>
+          </td>
+          <td>
+            <team:points/>
+          </td>
+          <td>
+            <team:wins/>
+          </td>
+          <td>
+            <team:draws/>
+          </td>
+          <td>
+            <team:losses/>
+          </td>
+          <td>
+            <team:posGoals/>
+          </td>
+          <td>
+            <team:negGoals/>
+          </td>
         </tr>
       </groups:team-list>
     </table>
-    <hr />
-    <h3 class="alt"><lift:loc>Games</lift:loc></h3>
+    <hr/>
+    <h3 class="alt">
+      <lift:loc>Games</lift:loc>
+    </h3>
     <table>
       <tr>
-        <th>&nbsp;</th>
-        <th><lift:loc>Date</lift:loc></th>
-        <th><lift:loc>Location</lift:loc></th>
-        <th><lift:loc>Game</lift:loc></th>
-        <th><lift:loc>Result</lift:loc></th>
+        <th></th>
+        <th>
+          <lift:loc>Date</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Location</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Game</lift:loc>
+        </th>
+        <th>
+          <lift:loc>Result</lift:loc>
+        </th>
       </tr>
       <groups:game-list>
         <tr>
-          <td><game:action /></td>
-          <td><game:date /></td>
-          <td><game:location /></td>
-          <td><game:teams /></td>
-          <td><game:result /></td>
+          <td>
+            <game:action/>
+          </td>
+          <td>
+            <game:date/>
+          </td>
+          <td>
+            <game:location/>
+          </td>
+          <td>
+            <game:teams/>
+          </td>
+          <td>
+            <game:result/>
+          </td>
         </tr>
       </groups:game-list>
     </table>

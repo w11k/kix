@@ -4,12 +4,10 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="keywords" content="soccer, champion, championship, 2010"/>
     <title>kix</title>
-    <lift:CSS.blueprint />
-    <lift:CSS.fancyType />
+    <lift:CSS.blueprint/>
+    <lift:CSS.fancyType/>
     <link rel="stylesheet" type="text/css" href="/style/kix.css"/>
-    <!--link rel="stylesheet" type="text/css" href="/style/jquery-ui-1.7.2.custom.css"/-->
-    <script type="text/javascript" src="/classpath/jquery.js" />
-    <!--script type="text/javascript" src="/js/jquery-ui-1.7.2.custom.min.js" /-->
+    <script type="text/javascript" src="/classpath/jquery.js"/>
   </head>
 
   <body>
@@ -27,39 +25,51 @@
           <lift:Menu.builder/>
         </div>
         <hr/>
-			  <div>
-			    <h3 class="alt"><lift:loc>Tipsters' Leaderboard</lift:loc></h3>
-			    <table>
-			      <tr>
-			        <th><lift:loc>Name</lift:loc></th>
-			        <th><lift:loc>Points</lift:loc></th>
-			      </tr>
+        <div>
+          <h3 class="alt">
+            <lift:loc>Tipsters' Leaderboard</lift:loc>
+          </h3>
+          <table>
+            <tr>
+              <th>
+                <lift:loc>Name</lift:loc>
+              </th>
+              <th>
+                <lift:loc>Points</lift:loc>
+              </th>
+            </tr>
             <lift:Users.top3>
               <users:list>
                 <tr>
-                  <td><user:name /></td>
-                  <td><user:points /></td>
+                  <td>
+                    <user:name/>
+                  </td>
+                  <td>
+                    <user:points/>
+                  </td>
                 </tr>
               </users:list>
             </lift:Users.top3>
-			    </table>
-			  </div>
+          </table>
+        </div>
       </div>
       <div class="span-1">&nbsp;</div>
-	    <div class="span-17 last">
+      <div class="span-17 last">
         <lift:Msgs>
           <lift:error_class>error</lift:error_class>
           <lift:notice_class>notice</lift:notice_class>
           <lift:warning_class>error</lift:warning_class>
         </lift:Msgs>
-	      <lift:bind name="content"/>
-	    </div>
+        <lift:bind name="content"/>
+      </div>
       <hr/>
       <div class="span-24 last" style="text-align: center;">
         <img src="/images/pbww.png"/>
-        <div><a href="http://www.nationalflaggen.de/">www.nationalflaggen.de</a></div>
-	    </div>
-	  </div>
+        <div>
+          <a href="http://www.nationalflaggen.de/">www.nationalflaggen.de</a>
+        </div>
+      </div>
+    </div>
   </body>
 
 </html>
