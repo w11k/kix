@@ -29,8 +29,6 @@ object User extends User with MetaMegaProtoUser[User] {
 
   override def signupFields = firstName :: lastName :: email :: password :: Nil
 
-//  override def skipEmailValidation = true
-
   override def loginXhtml = surround(super.loginXhtml)
 
   override def signupXhtml(user: User) = surround(super.signupXhtml(user))
@@ -71,10 +69,7 @@ object User extends User with MetaMegaProtoUser[User] {
   }
 
   private def surround(xhtml: => NodeSeq) = 
-    <lift:surround with="default" at="content">
-      <lift:Msgs><lift:error_class>error</lift:error_class></lift:Msgs>
-      { xhtml }
-    </lift:surround>
+    <lift:surround with="default" at="content">{ xhtml }</lift:surround>
 }
 
 /**
