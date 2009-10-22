@@ -32,7 +32,7 @@ import scala.xml.{NodeSeq, Text}
 object Tips {
 
   def create(game: Game) =
-    link("/tips/create", () => Tips.currentGame(Full(game)), createImg)
+    link("/tips/create", () => currentGame(Full(game)), createImg)
 
   def editDelete(tip: Tip, game: Game, action: Game => NodeSeq) = { 
     def delete = {
@@ -57,15 +57,19 @@ object Tips {
     case _ => zeroImg
   }
   
+  private object currentSearchedUser extends RequestVar[String]("")
+  
   private object currentTip extends RequestVar[Box[Tip]](Empty)
   
   private object currentGame extends RequestVar[Box[Game]](Empty)
 
   private def doEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
-    link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
+    link("/tips/edit", () => currentTip(Full(tip)), editImg) ++
     Text("") ++
     ajaxDeleteImg(ajaxInvoke(jsCmd))
 }
+
+import Tips._
 
 class Tips {
 
@@ -99,8 +103,10 @@ class Tips {
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tip" -> tip.goals)
     }
-    bind("tips", xhtml, 
-         "list" -> bindTips(Tip findNotByUser User.currentUser filter {
+    bind("tips", xhtml,
+         "tipster" -> text(currentSearchedUser.is, currentSearchedUser(_)),
+         "search" -> submit(?("Search"), () => ()),
+         "list" -> bindTips(Tip.findNotByUserLikeUserName(User.currentUser, currentSearchedUser.is) filter {
                      _.game.obj map { _.date.is before now } openOr false
                    }))
   }
@@ -112,10 +118,10 @@ class Tips {
 
   private def createOrEdit(game: Tip => NodeSeq, xhtml: NodeSeq) = {
     val referrer = S.referer openOr "."
-    val tip = Tips.currentTip openOr {
+    val tip = currentTip openOr {
       val newTip = Tip.create.user(User.currentUser)
-      for (g <- Tips.currentGame.is) newTip.game(g)
-      Tips.currentTip(Full(newTip))
+      for (g <- currentGame.is) newTip.game(g)
+      currentTip(Full(newTip))
       newTip
     }
     def handleSave() {

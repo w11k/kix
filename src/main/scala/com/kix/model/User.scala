@@ -17,7 +17,7 @@ package com.kix.model
 
 import net.liftweb.common._
 import net.liftweb.mapper._
-import net.liftweb.http.S.??
+import net.liftweb.http.S.{?, ??}
 import net.liftweb.sitemap._
 import Loc._
 import net.liftweb.util._
@@ -28,7 +28,7 @@ import scala.xml.NodeSeq
  */
 object User extends User with MetaMegaProtoUser[User] {
 
-  override def signupFields = firstName :: lastName :: email :: password :: Nil
+  override def signupFields = firstName :: email :: password :: Nil
 
   override def loginXhtml = surround(super.loginXhtml)
 
@@ -77,6 +77,8 @@ object User extends User with MetaMegaProtoUser[User] {
 * A persistent user.
 */
 class User extends MegaProtoUser[User] {
+
+  override def firstNameDisplayName = ?("Name") 
 
   override def getSingleton = User
 

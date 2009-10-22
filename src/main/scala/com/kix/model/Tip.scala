@@ -40,6 +40,18 @@ object Tip extends Tip with LongKeyedMetaMapper[Tip] {
     user map { u => findNotByUserId(u.id) } openOr Nil
 
   def findNotByUserId(id: Long) = findAll(NotBy(Tip.user, id))
+
+  def findNotByUserLikeUserName(user: Box[User], name: String) =
+    user map { u => findNotByUserIdLikeUserName(u.id, name) } openOr Nil
+
+  def findNotByUserIdLikeUserName(id: Long, name: String) = {
+    val trimmedName = name.trim
+    def queryName = 
+      if (trimmedName endsWith "%") trimmedName else trimmedName + "%" 
+    if (trimmedName.isEmpty) findNotByUserId(id)
+    else findAll(NotBy(Tip.user, id), 
+                 In(Tip.user, User.id, Like(User.firstName, queryName)))
+  }
 }
 
 /**

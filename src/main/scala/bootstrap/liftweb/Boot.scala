@@ -98,6 +98,12 @@ class Boot {
     DB.defineConnectionManager(DefaultConnectionIdentifier , DBVendor)
     Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
     User.eventuallyCreateAdmin()
+    DB addLogFunc { (query, time) =>
+      Log.info("All queries took " + time + "ms.")
+      query.allEntries foreach { 
+        case DBLogEntry(stmt, duration) => Log.info(stmt + " took " + duration + "ms.")
+      }
+    }
 
     Log info "Successfully booted kix.com. Have fun!"
   }
