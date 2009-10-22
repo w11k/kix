@@ -111,6 +111,7 @@ class Tips {
   def edit(xhtml: NodeSeq) = createOrEdit(_.game.asHtml, xhtml)
 
   private def createOrEdit(game: Tip => NodeSeq, xhtml: NodeSeq) = {
+    val referrer = S.referer openOr "."
     val tip = Tips.currentTip openOr {
       val newTip = Tip.create.user(User.currentUser)
       for (g <- Tips.currentGame.is) newTip.game(g)
@@ -120,7 +121,7 @@ class Tips {
     def handleSave() {
       if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
-      S redirectTo "."
+      S redirectTo referrer
     }
     bind("tip", xhtml,
          "game" -> game(tip),
