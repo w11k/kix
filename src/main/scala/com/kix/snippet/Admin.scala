@@ -15,8 +15,9 @@
  */
 package com.kix.snippet
 
-import lib.Initializer
+import lib._
 import model._
+
 import net.liftweb.http.S.?
 import net.liftweb.http.SHtml._
 import net.liftweb.util.Helpers._

@@ -16,10 +16,12 @@
 package com.kix.model
 
 import lib._
+
+import net.liftweb.common._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
 import net.liftweb.util._
-import net.liftweb.util.Helpers._
+import Helpers._
 
 /**
  * Helper for a persistent result.

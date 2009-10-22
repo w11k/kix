@@ -16,6 +16,7 @@
 package com.kix.snippet
 
 import model._
+
 import net.liftweb.util.Helpers._
 import scala.xml.NodeSeq
 

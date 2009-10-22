@@ -16,7 +16,7 @@
 package com.kix.lib
 
 import net.liftweb.http.S.?
-import net.liftweb.http.js.JsExp
+import net.liftweb.http.js._
 import scala.xml._
 
 object ImgHelpers {

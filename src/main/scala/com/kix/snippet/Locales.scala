@@ -15,11 +15,12 @@
  */
 package com.kix.snippet
 
-import java.util.Locale._
 import lib._
+
+import java.util.Locale._
+import net.liftweb.common._
 import net.liftweb.http.S
 import net.liftweb.http.SHtml._
-import net.liftweb.util._
 import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 

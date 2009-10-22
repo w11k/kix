@@ -16,7 +16,7 @@
 package com.kix.lib
 
 import java.util.Locale
+import net.liftweb.common._
 import net.liftweb.http._
-import net.liftweb.util._
 
 object SessionLocale extends SessionVar[Box[Locale]](Empty)

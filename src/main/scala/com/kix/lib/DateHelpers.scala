@@ -17,9 +17,10 @@ package com.kix.lib
 
 import model._
 
-import java.util._
-import java.text._
-import DateFormat._
+import java.text.{DateFormat, SimpleDateFormat}
+import DateFormat.{getDateTimeInstance, SHORT}
+import java.util.{Date, Locale}
+import net.liftweb.common._
 import net.liftweb.util._
 import TimeHelpers.now
 
