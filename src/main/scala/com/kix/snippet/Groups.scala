@@ -63,7 +63,7 @@ class Groups {
              "date" -> format(game.date.is, locale),
              "location" -> game.location.is,
              "teams" -> game.name,
-             "result" -> (Result findByGameId game.id.is map { _.goals } openOr ""))
+             "result" -> (Result goalsForGame game))
       }
     }
     bind("groups", xhtml,

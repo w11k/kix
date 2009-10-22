@@ -38,7 +38,11 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
 
   override def afterSave = updatePointsAndTeams _ :: super.afterSave
 
-  def findByGameId(gameId: Long) = find(By(game, gameId)) 
+  def goalsForGame(game: Box[Game]): String = 
+    game map { goalsForGame(_) } openOr "" 
+
+  def goalsForGame(game: Game): String =
+    find(By(Result.game, game.id.is)) map { _.goals } openOr "" 
 
   private def updatePointsAndTeams(result: Result) {
     def points(tip: Tip) = {

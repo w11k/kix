@@ -86,7 +86,8 @@ class Tips {
            "action" -> bindAction(game),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tip" -> tip.goals)
+           "tip" -> tip.goals,
+           "result" -> (Result goalsForGame game))
     }
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       <tr id={ tip.id.is.toString }>{ bindTip(tip) }</tr>
@@ -101,7 +102,8 @@ class Tips {
            "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tip" -> tip.goals)
+           "tip" -> tip.goals,
+           "result" -> (Result goalsForGame game))
     }
     bind("tips", xhtml,
          "tipster" -> text(currentSearchedUser.is, currentSearchedUser(_)),
