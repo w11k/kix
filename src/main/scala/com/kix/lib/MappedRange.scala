@@ -15,9 +15,9 @@
  */
 package com.kix.lib
 
+import net.liftweb.common._
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
-import net.liftweb.util.Full
 
 /**
  * Special MappedInt based on a range.

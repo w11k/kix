@@ -18,11 +18,12 @@ package com.kix.snippet
 import lib.DateHelpers._
 import lib.ImgHelpers._
 import model._
+
+import net.liftweb.common._
 import net.liftweb.http._
 import S._
 import SHtml._
-import net.liftweb.util._
-import Helpers._
+import net.liftweb.util.Helpers._
 import scala.xml.NodeSeq
 
 object Games {

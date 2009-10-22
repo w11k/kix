@@ -18,14 +18,15 @@ package com.kix.snippet
 import lib.DateHelpers._
 import lib.ImgHelpers._
 import model._
+
 import Game.notYetStarted_?
+import net.liftweb.common._
 import net.liftweb.http._
 import S.{?, locale}
 import SHtml._
-import js.JsCmd
-import js.JsCmds._
-import net.liftweb.util._
-import Helpers._
+import js._
+import JsCmds._
+import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 
 object Tips {

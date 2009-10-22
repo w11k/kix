@@ -16,9 +16,10 @@
 package com.kix.model
 
 import lib._
+
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
-import net.liftweb.util._
+import net.liftweb.common._
 import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 

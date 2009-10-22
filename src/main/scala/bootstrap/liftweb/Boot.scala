@@ -16,17 +16,19 @@
 package bootstrap.liftweb
 
 import com.kix.model._
-import com.kix.lib.SessionLocale
+import com.kix.lib._
 import com.kix.lib.DateHelpers._
+
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
-import javax.mail._
+import javax.mail.{Authenticator, PasswordAuthentication}
+import net.liftweb.common._
 import net.liftweb.http._
-import net.liftweb.http.S.?
+import S.?
 import net.liftweb.mapper._
-import net.liftweb.util._
 import net.liftweb.sitemap._
-import net.liftweb.sitemap.Loc._
+import Loc._
+import net.liftweb.util._
 
 class Boot {
 

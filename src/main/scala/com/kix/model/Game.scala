@@ -15,11 +15,12 @@
  */
 package com.kix.model
 
-import lib.SuperCRUDify
+import lib._
+
 import net.liftweb.http.S.?
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
-import net.liftweb.util._
+import net.liftweb.common._
 import net.liftweb.util.Helpers.now
 import scala.xml.Text
 

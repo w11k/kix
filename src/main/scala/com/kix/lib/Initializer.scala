@@ -18,6 +18,7 @@ package com.kix.lib
 import model._
 import Group._
 import lib.DateHelpers._
+
 import net.liftweb.util.TimeHelpers._
 
 object Initializer {
