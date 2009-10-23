@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.weiglewilczek.kix.model
 
+import net.liftweb.common._
 import net.liftweb.mapper._
-import net.liftweb.http.S.??
+import net.liftweb.http.S.{?, ??}
 import net.liftweb.sitemap._
-import net.liftweb.sitemap.Loc._
+import Loc._
 import net.liftweb.util._
 import scala.xml.NodeSeq
 
@@ -27,9 +28,7 @@ import scala.xml.NodeSeq
  */
 object User extends User with MetaMegaProtoUser[User] {
 
-  override def signupFields = firstName :: lastName :: email :: password :: Nil
-
-//  override def skipEmailValidation = true
+  override def signupFields = firstName :: email :: password :: Nil
 
   override def loginXhtml = surround(super.loginXhtml)
 
@@ -71,16 +70,15 @@ object User extends User with MetaMegaProtoUser[User] {
   }
 
   private def surround(xhtml: => NodeSeq) = 
-    <lift:surround with="default" at="content">
-      <lift:Msgs><lift:error_class>error</lift:error_class></lift:Msgs>
-      { xhtml }
-    </lift:surround>
+    <lift:surround with="default" at="content">{ xhtml }</lift:surround>
 }
 
 /**
 * A persistent user.
 */
 class User extends MegaProtoUser[User] {
+
+  override def firstNameDisplayName = ?("Name") 
 
   override def getSingleton = User
 

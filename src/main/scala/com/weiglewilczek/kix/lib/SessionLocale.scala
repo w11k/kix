@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.lib
 
-import net.liftweb.http.S.?
-import net.liftweb.mapper._
+import java.util.Locale
+import net.liftweb.common._
+import net.liftweb.http._
 
-trait SuperCRUDify[K, T <: KeyedMapper[K, T]] extends CRUDify[K, T] {
-  self: T with KeyedMetaMapper[K, T] =>
-
-  override def createMenuName = ?("createMenuName", displayName)
-
-  override def showAllMenuName = ?("showAllMenuName", showAllMenuDisplayName)
-
-  def showAllMenuDisplayName = displayName + "s"
-}
+object SessionLocale extends SessionVar[Box[Locale]](Empty)

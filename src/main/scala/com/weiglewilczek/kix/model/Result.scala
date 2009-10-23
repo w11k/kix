@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.weiglewilczek.kix.model
 
 import lib._
+
+import net.liftweb.common._
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
 import net.liftweb.util._
-import net.liftweb.util.Helpers._
+import Helpers._
 
 /**
  * Helper for a persistent result.
@@ -36,7 +38,11 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
 
   override def afterSave = updatePointsAndTeams _ :: super.afterSave
 
-  def findByGameId(gameId: Long) = find(By(game, gameId)) 
+  def goalsForGame(game: Box[Game]): String = 
+    game map { goalsForGame(_) } openOr "" 
+
+  def goalsForGame(game: Game): String =
+    find(By(Result.game, game.id.is)) map { _.goals } openOr "" 
 
   private def updatePointsAndTeams(result: Result) {
     def points(tip: Tip) = {

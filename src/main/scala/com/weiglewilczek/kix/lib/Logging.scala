@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.snippet
+package com.weiglewilczek.kix.lib
 
-import java.util.Locale._
-import lib._
-import net.liftweb.http.S
-import net.liftweb.http.SHtml._
-import net.liftweb.util._
-import net.liftweb.util.Helpers._
-import scala.xml.{NodeSeq, Text}
+import net.liftweb.util.LogBoot._
 
-class Locales {
-
-  def render(xhtml: NodeSeq) = {
-    def path = S.request map { _.request.url.toString } openOr ""
-    link(path, () => SessionLocale(Full(GERMANY)), <img src="/images/DE-12x18.gif" alt="DE" title="DE"/>) ++
-      Text(" ") ++
-      link(path, () => SessionLocale(Full(UK)), <img src="/images/UK-12x18.gif" alt="UK" title="UK"/>)  
-  }
+/**
+ * Mixing this trait into whatever type you want to be able to log.
+ */
+trait Logging {
+  val log = loggerByName(this.getClass.getName)
 }

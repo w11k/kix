@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bootstrap.liftweb
+package com.weiglewilczek.kix
 
-import com.kix.model._
-import com.kix.lib.SessionLocale
-import com.kix.lib.DateHelpers._
+import model._
+import lib._
+import DateHelpers._
+
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
-import javax.mail._
+import javax.mail.{Authenticator, PasswordAuthentication}
+import net.liftweb.common._
 import net.liftweb.http._
-import net.liftweb.http.S.?
+import S.?
 import net.liftweb.mapper._
-import net.liftweb.util._
 import net.liftweb.sitemap._
-import net.liftweb.sitemap.Loc._
+import Loc._
+import net.liftweb.util._
 
-class Boot {
+class Boot extends Bootable with Logging {
 
-  def boot() {
-    Log info "Booting kix.com, please stand by ..."
+  override def boot() {
+    log info "Booting kix.com, please stand by ..."
 
     // Freeze locale as GERMAN
     LiftRules.localeCalculator = 
@@ -52,7 +54,7 @@ class Boot {
     }
 
     // Use com.kix to resolve snippets and views
-    LiftRules addToPackages "com.kix"
+    LiftRules addToPackages getClass.getPackage
 
     // Setup sitemap: Home, CRUD stuff, ...
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
@@ -96,8 +98,14 @@ class Boot {
     DB.defineConnectionManager(DefaultConnectionIdentifier , DBVendor)
     Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
     User.eventuallyCreateAdmin()
+    DB addLogFunc { (query, time) =>
+      log debug ("All queries took " + time + "ms.")
+      query.allEntries foreach { 
+        case DBLogEntry(stmt, duration) => log debug (stmt + " took " + duration + "ms.")
+      }
+    }
 
-    Log info "Successfully booted kix.com. Have fun!"
+    log info "Successfully booted kix.com. Have fun!"
   }
 }
 

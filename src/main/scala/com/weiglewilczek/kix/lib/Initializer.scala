@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.lib
 
 import model._
 import Group._
 import lib.DateHelpers._
+
 import net.liftweb.util.TimeHelpers._
 
 object Initializer {

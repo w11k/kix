@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.lib
 
 import net.liftweb.http.S.?
-import net.liftweb.http.js.JsExp
+import net.liftweb.http.js._
 import scala.xml._
 
 object ImgHelpers {

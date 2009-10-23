@@ -16,6 +16,9 @@
           <th>
             <lift:loc>Tip</lift:loc>
           </th>
+          <th>
+            <lift:loc>Result</lift:loc>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -32,14 +35,23 @@
           <td>
             <tip:tip/>
           </td>
+          <td>
+            <tip:result/>
+          </td>
         </tips:list>
       </tbody>
     </table>
   </lift:Tips.myTips>
+  <hr/>
   <h3 class="alt">
     <lift:loc>Tips from other Tipsters</lift:loc>
   </h3>
-  <lift:Tips.otherTips>
+  <lift:Tips.otherTips form="post">
+    <div>
+      <lift:loc>Tipster</lift:loc>&nbsp;
+      <tips:tipster/>
+      <tips:search/>
+    </div>
     <table>
       <thead>
         <tr>
@@ -54,6 +66,9 @@
           </th>
           <th>
             <lift:loc>Tip</lift:loc>
+          </th>
+          <th>
+            <lift:loc>Result</lift:loc>
           </th>
         </tr>
       </thead>
@@ -71,6 +86,9 @@
             </td>
             <td>
               <tip:tip/>
+            </td>
+            <td>
+              <tip:result/>
             </td>
           </tr>
         </tips:list>

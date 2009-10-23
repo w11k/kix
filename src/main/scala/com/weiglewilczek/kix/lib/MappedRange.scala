@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.lib
 
+import net.liftweb.common._
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
-import net.liftweb.util.Full
 
 /**
  * Special MappedInt based on a range.

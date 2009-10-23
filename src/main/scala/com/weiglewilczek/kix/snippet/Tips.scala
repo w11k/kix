@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.snippet
+package com.weiglewilczek.kix.snippet
 
 import lib.DateHelpers._
 import lib.ImgHelpers._
 import model._
+
 import Game.notYetStarted_?
+import net.liftweb.common._
 import net.liftweb.http._
 import S.{?, locale}
 import SHtml._
-import js.JsCmd
-import js.JsCmds._
-import net.liftweb.util._
-import Helpers._
+import js._
+import JsCmds._
+import net.liftweb.util.Helpers._
 import scala.xml.{NodeSeq, Text}
 
 object Tips {
 
   def create(game: Game) =
-    link("/tips/create", () => Tips.currentGame(Full(game)), createImg)
+    link("/tips/create", () => currentGame(Full(game)), createImg)
 
   def editDelete(tip: Tip, game: Game, action: Game => NodeSeq) = { 
     def delete = {
@@ -56,15 +57,19 @@ object Tips {
     case _ => zeroImg
   }
   
+  private object currentSearchedUser extends RequestVar[String]("")
+  
   private object currentTip extends RequestVar[Box[Tip]](Empty)
   
   private object currentGame extends RequestVar[Box[Game]](Empty)
 
   private def doEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
-    link("/tips/edit", () => Tips.currentTip(Full(tip)), editImg) ++
+    link("/tips/edit", () => currentTip(Full(tip)), editImg) ++
     Text("") ++
     ajaxDeleteImg(ajaxInvoke(jsCmd))
 }
+
+import Tips._
 
 class Tips {
 
@@ -81,7 +86,8 @@ class Tips {
            "action" -> bindAction(game),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tip" -> tip.goals)
+           "tip" -> tip.goals,
+           "result" -> (Result goalsForGame game))
     }
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       <tr id={ tip.id.is.toString }>{ bindTip(tip) }</tr>
@@ -96,10 +102,13 @@ class Tips {
            "tipster" -> (tip.user.obj map { _.shortName } openOr ""),
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tip" -> tip.goals)
+           "tip" -> tip.goals,
+           "result" -> (Result goalsForGame game))
     }
-    bind("tips", xhtml, 
-         "list" -> bindTips(Tip findNotByUser User.currentUser filter {
+    bind("tips", xhtml,
+         "tipster" -> text(currentSearchedUser.is, currentSearchedUser(_)),
+         "search" -> submit(?("Search"), () => ()),
+         "list" -> bindTips(Tip.findNotByUserLikeUserName(User.currentUser, currentSearchedUser.is) filter {
                      _.game.obj map { _.date.is before now } openOr false
                    }))
   }
@@ -110,16 +119,17 @@ class Tips {
   def edit(xhtml: NodeSeq) = createOrEdit(_.game.asHtml, xhtml)
 
   private def createOrEdit(game: Tip => NodeSeq, xhtml: NodeSeq) = {
-    val tip = Tips.currentTip openOr {
+    val referrer = S.referer openOr "."
+    val tip = currentTip openOr {
       val newTip = Tip.create.user(User.currentUser)
-      for (g <- Tips.currentGame.is) newTip.game(g)
-      Tips.currentTip(Full(newTip))
+      for (g <- currentGame.is) newTip.game(g)
+      currentTip(Full(newTip))
       newTip
     }
     def handleSave() {
       if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
-      S redirectTo "."
+      S redirectTo referrer
     }
     bind("tip", xhtml,
          "game" -> game(tip),

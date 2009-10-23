@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.weiglewilczek.kix.model
 
-import lib.SuperCRUDify
+import lib._
+
 import net.liftweb.http.S.?
 import net.liftweb.http.SHtml.select
 import net.liftweb.mapper._
-import net.liftweb.util._
+import net.liftweb.common._
 import net.liftweb.util.Helpers.now
 import scala.xml.Text
 
