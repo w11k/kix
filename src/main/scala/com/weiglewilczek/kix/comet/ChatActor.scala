@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.comet
+package com.weiglewilczek.kix.comet
 
+import net.liftweb.common._
 import net.liftweb.http.CometActor
-import net.liftweb.util.{ActorPing, Full}
-import net.liftweb.util.Helpers._
+import net.liftweb.util._
+import Helpers._
 import net.liftweb.http.js.jquery.JqJsCmds._
 import scala.xml.{NodeSeq, Text}
 
@@ -26,18 +27,22 @@ class ChatActor extends CometActor {
   override def render = {
     def bindMessages = List("a", "b", "c") flatMap { msg =>
       bind("msg", chooseTemplate("msgs", "list", defaultXml),
-           AttrBindParam("id", Text("x123"), "id"),
            "content" -> msg)
     }
-    bind("msgs", defaultXml, "list" -> bindMessages)
+    bind("msgs", defaultXml, 
+         AttrBindParam("id", Text(MsgsId), "id"),
+         "list" -> bindMessages)
   }
 
   override def lowPriority = {
     case Tick => {
-      partialUpdate(AppendHtml("x123", <li>x</li>))
+      partialUpdate(AppendHtml(MsgsId, <li>xxx</li>))
       ActorPing.schedule(this, Tick, 2 seconds)
     }
   }
+
+  private lazy val MsgsId = uniqueId + "_elem"
+      ActorPing.schedule(this, Tick, 2 seconds)
 }
 
 case object Tick
