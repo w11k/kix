@@ -61,9 +61,9 @@
         <hr/>
         <div>
           <h3 class="alt">
-            <lift:loc>Chat</lift:loc>
+            <lift:loc>kix Chat</lift:loc>
           </h3>
-          <lift:comet type="ChatActor">
+          <lift:comet type="ChatServer">
             <ul msgs:id="na" style="color: red;">
               <msgs:list>
                 <li>
@@ -71,6 +71,12 @@
                 </li>
               </msgs:list>
             </ul>
+            <div>
+              <chat:input>
+                <chat:msg/>&nbsp;
+                <chat:post/>
+              </chat:input>
+            </div>
           </lift:comet>
         </div>
       </div>

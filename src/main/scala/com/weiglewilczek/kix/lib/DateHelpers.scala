@@ -18,7 +18,7 @@ package com.weiglewilczek.kix.lib
 import model._
 
 import java.text.{DateFormat, SimpleDateFormat}
-import DateFormat.{getDateTimeInstance, SHORT}
+import DateFormat.{getDateTimeInstance, getTimeInstance, SHORT}
 import java.util.{Date, Locale}
 import net.liftweb.common._
 import net.liftweb.util._
@@ -28,18 +28,22 @@ object DateHelpers {
 
   val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"
 
-  def format(date: Date, locale: Locale) = dateFormat(locale) format date
+  def format(date: Date, locale: Locale) = shortDateTimeFormat(locale) format date
+
+  def formatTime(date: Date, locale: Locale) = shortTimeFormat(locale) format date
 
   def parse(date: String, locale: Locale) = try {
-    Full(dateFormat(locale) parse date)
+    Full(shortDateTimeFormat(locale) parse date)
   } catch { case e => 
     Log error ("Cannot parse date \"%s\"!".format(date), e)
     Failure("Bad date: " + date, Full(e), Empty) 
   }
 
   implicit def parseIso(date: String) = dateFormat(IsoDateTime) parse date
-  
+
   private def dateFormat(pattern: String) = new SimpleDateFormat(pattern)
 
-  private def dateFormat(locale: Locale) = getDateTimeInstance(SHORT, SHORT, locale)
+  private def shortDateTimeFormat(locale: Locale) = getDateTimeInstance(SHORT, SHORT, locale)
+
+  private def shortTimeFormat(locale: Locale) = getTimeInstance(SHORT, locale)
 }

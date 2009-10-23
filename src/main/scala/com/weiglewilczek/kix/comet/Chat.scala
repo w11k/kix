@@ -15,19 +15,31 @@
  */
 package com.weiglewilczek.kix.comet
 
+import lib.DateHelpers._
+
 import net.liftweb.common._
-import net.liftweb.http.CometActor
+import net.liftweb.http._
+import S._
+import SHtml._
+import js.JsCmds._
+import js.jquery.JqJsCmds._
 import net.liftweb.util._
 import Helpers._
-import net.liftweb.http.js.jquery.JqJsCmds._
 import scala.xml.{NodeSeq, Text}
 
-class ChatActor extends CometActor {
+class Chat extends CometActor with CometListener {
+
+  override def fixedRender = {
+    var msg = ""
+    bind("chat", chooseTemplate("chat", "input", defaultXml),
+         "msg" -> text("", msg = _),
+         "post" -> submit(?("Post"), () => ()))
+  }
 
   override def render = {
-    def bindMessages = List("a", "b", "c") flatMap { msg =>
+    def bindMessages = chatLines flatMap { line =>
       bind("msg", chooseTemplate("msgs", "list", defaultXml),
-           "content" -> msg)
+           "content" -> toXhtml(line))
     }
     bind("msgs", defaultXml, 
          AttrBindParam("id", Text(MsgsId), "id"),
@@ -35,14 +47,21 @@ class ChatActor extends CometActor {
   }
 
   override def lowPriority = {
-    case Tick => {
-      partialUpdate(AppendHtml(MsgsId, <li>xxx</li>))
-      ActorPing.schedule(this, Tick, 2 seconds)
+    case ChatServerUpdate(lines) => {
+      chatLines = lines
+      val update = lines map { line => AppendHtml(MsgsId, toXhtml(line)) }
+      partialUpdate(update)
     }
   }
 
-  private lazy val MsgsId = uniqueId + "_elem"
-      ActorPing.schedule(this, Tick, 2 seconds)
-}
+  override def registerWith = ChatServer
 
-case object Tick
+  private lazy val MsgsId = uniqueId + "_msgs"
+
+  private var chatLines = List[ChatLine]()
+
+  private def toXhtml(line: ChatLine) =
+    <li> ++
+    Text(line.name + " " + formatTime(line.when, locale) + " " + line.msg) ++
+    </li>
+}
