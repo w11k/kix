@@ -13,21 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.snippet
+package com.weiglewilczek.kix.lib
 
-import model._
+import java.util.Locale
+import net.liftweb.common._
+import net.liftweb.http._
 
-import net.liftweb.util.Helpers._
-import scala.xml.NodeSeq
-
-class Users {
-
-  def top3(xhtml: NodeSeq) = {
-    def bindUsers(tips: List[User]) = tips flatMap { user =>
-      bind("user", chooseTemplate("users", "list", xhtml),
-           "name" -> user.shortName,
-           "points" -> user.points.is)
-    }
-    bind("users", xhtml, "list" -> bindUsers(User top 3))
-  }
-}
+object SessionLocale extends SessionVar[Box[Locale]](Empty)

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix
+package com.weiglewilczek.kix
 
 import model._
 import lib._
@@ -54,7 +54,7 @@ class Boot extends Bootable with Logging {
     }
 
     // Use com.kix to resolve snippets and views
-    LiftRules addToPackages "com.kix"
+    LiftRules addToPackages getClass.getPackage
 
     // Setup sitemap: Home, CRUD stuff, ...
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))

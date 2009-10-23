@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.snippet
 
-import net.liftweb.common._
-import net.liftweb.http.SHtml.select
-import net.liftweb.mapper._
+import model._
 
-/**
- * Special MappedInt based on a range.
- */
-class MappedRange[M <: Mapper[M]](owner: M, range: Range) extends MappedInt(owner) {
+import net.liftweb.util.Helpers._
+import scala.xml.NodeSeq
 
-  override def toForm = Full(select(RangeMap, Full(is.toString), setFromAny(_))) 
-  
-  private lazy val RangeMap = range map { x => (x.toString, x.toString) }
+class Users {
+
+  def top3(xhtml: NodeSeq) = {
+    def bindUsers(tips: List[User]) = tips flatMap { user =>
+      bind("user", chooseTemplate("users", "list", xhtml),
+           "name" -> user.shortName,
+           "points" -> user.points.is)
+    }
+    bind("users", xhtml, "list" -> bindUsers(User top 3))
+  }
 }

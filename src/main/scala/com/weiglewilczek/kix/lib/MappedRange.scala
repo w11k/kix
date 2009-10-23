@@ -13,10 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.lib
+package com.weiglewilczek.kix.lib
 
-import java.util.Locale
 import net.liftweb.common._
-import net.liftweb.http._
+import net.liftweb.http.SHtml.select
+import net.liftweb.mapper._
 
-object SessionLocale extends SessionVar[Box[Locale]](Empty)
+/**
+ * Special MappedInt based on a range.
+ */
+class MappedRange[M <: Mapper[M]](owner: M, range: Range) extends MappedInt(owner) {
+
+  override def toForm = Full(select(RangeMap, Full(is.toString), setFromAny(_))) 
+  
+  private lazy val RangeMap = range map { x => (x.toString, x.toString) }
+}

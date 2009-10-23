@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.weiglewilczek.kix.model
 
 import lib._
 

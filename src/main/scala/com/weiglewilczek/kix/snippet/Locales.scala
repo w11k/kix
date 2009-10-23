@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kix.model
+package com.weiglewilczek.kix.snippet
 
-/**
- * A group.
- */
-object Group extends Enumeration {
-  val A = Value("A")
-  val B = Value("B")
-  val C = Value("C")
-  val D = Value("D")
-  val E = Value("E")
-  val F = Value("F")
-  val G = Value("G")
-  val H = Value("H")
+import lib._
+
+import java.util.Locale._
+import net.liftweb.common._
+import net.liftweb.http.S
+import net.liftweb.http.SHtml._
+import net.liftweb.util.Helpers._
+import scala.xml.{NodeSeq, Text}
+
+class Locales {
+
+  def render(xhtml: NodeSeq) = {
+    def path = S.request map { _.request.url.toString } openOr ""
+    link(path, () => SessionLocale(Full(GERMANY)), <img src="/images/DE-12x18.gif" alt="DE" title="DE"/>) ++
+      Text(" ") ++
+      link(path, () => SessionLocale(Full(UK)), <img src="/images/UK-12x18.gif" alt="UK" title="UK"/>)  
+  }
 }

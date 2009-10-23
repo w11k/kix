@@ -23,7 +23,7 @@
     <appender-ref ref="file"/>
   </logger>
 
-  <logger name="com.kix" additivity="false">
+  <logger name="com.weiglewilczek.kix" additivity="false">
     <level value="debug"/>
     <appender-ref ref="console"/>
     <appender-ref ref="file"/>
