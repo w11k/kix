@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bootstrap.liftweb
+package com.kix
 
-import com.kix.model._
-import com.kix.lib._
-import com.kix.lib.DateHelpers._
+import model._
+import lib._
+import DateHelpers._
 
 import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale}
@@ -30,10 +30,10 @@ import net.liftweb.sitemap._
 import Loc._
 import net.liftweb.util._
 
-class Boot {
+class Boot extends Bootable with Logging {
 
-  def boot() {
-    Log info "Booting kix.com, please stand by ..."
+  override def boot() {
+    log info "Booting kix.com, please stand by ..."
 
     // Freeze locale as GERMAN
     LiftRules.localeCalculator = 
@@ -99,13 +99,13 @@ class Boot {
     Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
     User.eventuallyCreateAdmin()
     DB addLogFunc { (query, time) =>
-      Log.info("All queries took " + time + "ms.")
+      log debug ("All queries took " + time + "ms.")
       query.allEntries foreach { 
-        case DBLogEntry(stmt, duration) => Log.info(stmt + " took " + duration + "ms.")
+        case DBLogEntry(stmt, duration) => log debug (stmt + " took " + duration + "ms.")
       }
     }
 
-    Log info "Successfully booted kix.com. Have fun!"
+    log info "Successfully booted kix.com. Have fun!"
   }
 }
 
