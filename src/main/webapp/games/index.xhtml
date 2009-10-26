@@ -1,6 +1,6 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
   <lift:Games.forDateRange form="post">
-    <h3 class="alt">
+    <h3>
       <lift:loc>Match Schedule</lift:loc>
     </h3>
     <div>
@@ -24,9 +24,11 @@
         </th>
       </tr>
       <games:list>
-        <tr>
+        <tr game:class="">
           <td>
-            <game:action/>
+            <span game:id="">
+              <game:action/>
+            </span>
           </td>
           <td>
             <game:date/>

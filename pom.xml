@@ -3,7 +3,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.kix</groupId>
+  <groupId>com.weiglewilczek.kix</groupId>
   <artifactId>kix</artifactId>
   <name>kix</name>
   <version>1.0-M2</version>

@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.snippet
+package com.weiglewilczek.kix.lib
 
-import lib._
-import model._
-
+import net.liftweb.http._
+import SHtml._
 import net.liftweb.util.Helpers._
-import scala.xml.NodeSeq
+import scala.xml.Text
 
-class Users {
+case class OddOrEven() {
 
-  def top3(xhtml: NodeSeq) = {
-    val oddOrEven = OddOrEven()
-    def bindUsers(tips: List[User]) = tips flatMap { user =>
-      bind("user", chooseTemplate("users", "list", xhtml),
-           "name" -> user.shortName,
-           "points" -> user.points.is,
-           oddOrEven.next)
-    }
-    bind("users", xhtml, "list" -> bindUsers(User top 3))
+  def next = {
+    even_? = !even_?
+    AttrBindParam("class", if (even_?) Text("even") else Text("odd"), "class")
   }
+
+  def nextString = {
+    even_? = !even_?
+    if (even_?) "even" else "odd"
+  }
+
+  private var even_? = true
 }

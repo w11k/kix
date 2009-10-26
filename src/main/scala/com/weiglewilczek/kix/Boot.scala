@@ -33,7 +33,7 @@ import net.liftweb.util._
 class Boot extends Bootable with Logging {
 
   override def boot() {
-    log info "Booting kix.com, please stand by ..."
+    log info "Booting kix, please stand by ..."
 
     // Freeze locale as GERMAN
     LiftRules.localeCalculator = 
@@ -58,7 +58,7 @@ class Boot extends Bootable with Logging {
 
     // Setup sitemap: Home, CRUD stuff, ...
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
-    
+
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
     val gamesMenu = Menu(Loc("games", ("games" :: "index" :: Nil) -> false, 
                              ?("Match Schedule"))) :: Nil
@@ -72,16 +72,18 @@ class Boot extends Bootable with Logging {
     val tipsMenu = Menu(Loc("tips", ("tips" :: "index" :: Nil) -> false, 
                             ?("Tips"), ifLoggedIn),
                         tipsSubMenu: _*) :: Nil
-    
+    val chatMenu = Menu(Loc("chat", ("chat":: "index" :: Nil) -> false,
+                            ?("Chat"), ifLoggedIn)) :: Nil
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminSubMenu = Team.menus ::: Game.menus ::: Result.menus
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
                          adminSubMenu: _*) :: Nil
-    
+
     val menus = homeMenu :::
                 gamesMenu :::
                 groupsMenu :::
                 tipsMenu :::
+                chatMenu :::
                 adminMenu :::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)

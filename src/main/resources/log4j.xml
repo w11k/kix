@@ -29,6 +29,12 @@
     <appender-ref ref="file"/>
   </logger>
 
+  <logger name="com.weiglewilczek.kix.Boot" additivity="false">
+    <level value="info"/>
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </logger>
+
   <root>
     <level value="error"/>
     <appender-ref ref="console"/>

@@ -15,8 +15,9 @@
  */
 package com.weiglewilczek.kix.snippet
 
-import lib.DateHelpers._
-import lib.ImgHelpers._
+import lib._
+import DateHelpers._
+import ImgHelpers._
 import model._
 
 import net.liftweb.common._
@@ -25,7 +26,7 @@ import S._
 import SHtml._
 import net.liftweb.mapper._
 import net.liftweb.util.Helpers._
-import scala.xml.NodeSeq
+import scala.xml.{NodeSeq, Text}
 
 object Groups {
    
@@ -39,31 +40,38 @@ import Groups._
 
 class Groups {
 
-  def games(xhtml: NodeSeq) = {
+  def render(xhtml: NodeSeq) = {
     var lastPoints = 0
     var position = 1
-    def bindTeams(teams: List[Team]) = teams flatMap { team =>
-      if (team.points.is < lastPoints) position += 1
-      lastPoints = team.points.is
-      bind("team", chooseTemplate("groups", "team-list", xhtml),
-           "position" -> position,
-           "ensign" -> ensignImg(team.ensignUrl.is, team.name.is),
-           "name" -> team.name.is,
-           "points" -> team.points.is,
-           "wins" -> team.wins.is,
-           "draws" -> team.draws.is,
-           "losses" -> team.losses.is,
-           "posGoals" -> team.posGoals.is,
-           "negGoals" -> team.negGoals.is)
+    def bindTeams(teams: List[Team]) = {
+      val oddOrEven = OddOrEven()
+      teams flatMap { team =>
+        if (team.points.is < lastPoints) position += 1
+        lastPoints = team.points.is
+        bind("team", chooseTemplate("groups", "team-list", xhtml),
+             "position" -> position,
+             "ensign" -> ensignImg(team.ensignUrl.is, team.name.is),
+             "name" -> team.name.is,
+             "points" -> team.points.is,
+             "wins" -> team.wins.is,
+             "draws" -> team.draws.is,
+             "losses" -> team.losses.is,
+             "posGoals" -> team.posGoals.is,
+             "negGoals" -> team.negGoals.is,
+             oddOrEven.next)
+      }
     }
     def bindGames(games: List[Game]) = {
+      val oddOrEven = OddOrEven()
       games flatMap { game =>
         bind("game", chooseTemplate("groups", "game-list", xhtml),
              "action" -> (if (User.loggedIn_?) Games bindAction game else NodeSeq.Empty),
              "date" -> format(game.date.is, locale),
              "location" -> game.location.is,
              "teams" -> game.name,
-             "result" -> (Result goalsForGame game))
+             "result" -> (Result goalsForGame game),
+             AttrBindParam("id", Text(game.id.is.toString), "id"),
+             oddOrEven.next)
       }
     }
     bind("groups", xhtml,

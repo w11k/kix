@@ -12,27 +12,24 @@
 
   <body>
     <div class="container">
-      <div class="span-6">
-        <img src="/images/challenge.png"/>
+      <div class="span-5">
+        <img src="/images/logo_kix.gif" title="Built with the Lift Web Framework"/>
         <img src="/images/ajax-loader.gif" alt="" id="ajax-loader" style="display:none"/>
       </div>
-      <div class="span-14">
-        <img src="/images/kix.png"/>
-      </div>
-      <div class="span-4 last" style="text-align: right;">
+      <div class="span-14" style="text-align: right;">
         <lift:Locales/>
+      </div>
+      <div class="span-5 last" style="text-align: right;">
+        <img src="/images/challenge.png"/>
       </div>
       <hr/>
       <div class="span-5">
-        <div style="text-align: center;">
-          <img src="/images/logo.png" title="Built with the Lift Web Framework"/>
-        </div>
         <div class="menu">
           <lift:Menu.builder/>
         </div>
         <hr/>
         <div>
-          <h3 class="alt">
+          <h3>
             <lift:loc>Tipsters' Leaderboard</lift:loc>
           </h3>
           <table>
@@ -58,27 +55,21 @@
             </lift:Users.top3>
           </table>
         </div>
+
         <hr/>
         <div>
-          <h3 class="alt">
-            <lift:loc>kix Chat</lift:loc>
+          <h3>
+            <lift:loc>kix Chat Preview</lift:loc>
           </h3>
-          <lift:comet type="ChatServer">
-            <ul msgs:id="na" style="color: red;">
-              <msgs:list>
-                <li>
+            <lift:comet type="ChatPreview">
+              <div chat:id="na" class="chatPreview">
+                <chat:msgs>
                   <msg:content/>
-                </li>
-              </msgs:list>
-            </ul>
-            <div>
-              <chat:input>
-                <chat:msg/>&nbsp;
-                <chat:post/>
-              </chat:input>
-            </div>
-          </lift:comet>
+                </chat:msgs>
+              </div>
+            </lift:comet>
         </div>
+
       </div>
       <div class="span-1">&nbsp;
       </div>
@@ -98,7 +89,8 @@
         <img src="/images/pbww.png"/>
       </div>
       <div class="span-6 last" style="text-align: right;">
-        <a href="http://www.nationalflaggen.de/" style="text-decoration: none; color: #777777">www.nationalflaggen.de</a>
+        <a href="http://www.nationalflaggen.de/" style="text-decoration: none; color: #777777">www.nationalflaggen.de
+        </a>
       </div>
     </div>
   </body>

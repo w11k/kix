@@ -1,11 +1,11 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <lift:Groups.games form="post">
-    <div>
+  <lift:Groups form="get">
+    <h3>
       <lift:loc>Group</lift:loc>&nbsp;
       <groups:group/>
-    </div>
+    </h3>
     <hr/>
-    <h3 class="alt">
+    <h3>
       <lift:loc>Table</lift:loc>
     </h3>
     <table>
@@ -36,7 +36,7 @@
         </th>
       </tr>
       <groups:team-list>
-        <tr>
+        <tr team:class="">
           <td>
             <team:position/>
           </td>
@@ -66,7 +66,7 @@
       </groups:team-list>
     </table>
     <hr/>
-    <h3 class="alt">
+    <h3>
       <lift:loc>Games</lift:loc>
     </h3>
     <table>
@@ -86,9 +86,11 @@
         </th>
       </tr>
       <groups:game-list>
-        <tr>
+        <tr game:class="">
           <td>
-            <game:action/>
+            <span game:id="">
+              <game:action/>
+            </span>
           </td>
           <td>
             <game:date/>
@@ -105,5 +107,5 @@
         </tr>
       </groups:game-list>
     </table>
-  </lift:Groups.games>
+  </lift:Groups>
 </lift:surround>

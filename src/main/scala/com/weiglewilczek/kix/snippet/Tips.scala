@@ -15,8 +15,9 @@
  */
 package com.weiglewilczek.kix.snippet
 
-import lib.DateHelpers._
-import lib.ImgHelpers._
+import lib._
+import DateHelpers._
+import ImgHelpers._
 import model._
 
 import Game.notYetStarted_?
@@ -34,12 +35,12 @@ object Tips {
   def create(game: Game) =
     link("/tips/create", () => currentGame(Full(game)), createImg)
 
-  def editDelete(tip: Tip, game: Game, action: Game => NodeSeq) = { 
+  def editDelete(tip: Tip, game: Game, action: Game => NodeSeq) = {
     def delete = {
       Tip delete_! tip
       SetHtml(game.id.is.toString, action(game))
     }
-    doEditDelete(tip, delete _)
+    renderEditDelete(tip, delete _)
   }
 
   def editDelete(tip: Tip) = { 
@@ -47,7 +48,7 @@ object Tips {
       Tip delete_! tip
       SetHtml(tip.id.is.toString, NodeSeq.Empty)
     }
-    doEditDelete(tip, delete _)
+    renderEditDelete(tip, delete _)
   }
 
   def points(tip: Tip) = tip.points.is match {
@@ -63,7 +64,7 @@ object Tips {
   
   private object currentGame extends RequestVar[Box[Game]](Empty)
 
-  private def doEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
+  private def renderEditDelete(tip: Tip, jsCmd: () => JsCmd) = 
     link("/tips/edit", () => currentTip(Full(tip)), editImg) ++
     Text("") ++
     ajaxDeleteImg(ajaxInvoke(jsCmd))
@@ -71,31 +72,34 @@ object Tips {
 
 import Tips._
 
-class Tips {
+class Tips extends Logging {
 
   def myTips(xhtml: NodeSeq) = {
-    def bindTip(tip: Tip) = {
-      def bindAction(game: Box[Game]) =
+    val oddOrEven = OddOrEven()
+    def bindTips(tips: List[Tip]) = {
+      def bindAction(game: Box[Game], tip: Tip) =
         if (User.loggedIn_?) 
           if(notYetStarted_?(game)) Tips editDelete tip
           else Tips points tip
         else
           NodeSeq.Empty 
-      val game = tip.game.obj
-      bind("tip", chooseTemplate("tips", "list", xhtml),
-           "action" -> bindAction(game),
-           "game" -> (game map { _.name } openOr ""),
-           "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
-           "tip" -> tip.goals,
-           "result" -> (Result goalsForGame game))
-    }
-    def bindTips(tips: List[Tip]) = tips flatMap { tip =>
-      <tr id={ tip.id.is.toString }>{ bindTip(tip) }</tr>
+      tips flatMap { tip =>
+        val game = tip.game.obj
+        bind("tip", chooseTemplate("tips", "list", xhtml),
+             "action" -> bindAction(game, tip),
+             "game" -> (game map { _.name } openOr ""),
+             "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
+             "tip" -> tip.goals,
+             "result" -> (Result goalsForGame game),
+             AttrBindParam("id", Text(tip.id.is.toString), "id"),
+             oddOrEven.next)
+      }
     }
     bind("tips", xhtml, "list" -> bindTips(Tip findByUser User.currentUser))
   }
 
   def otherTips(xhtml: NodeSeq) = {
+    val oddOrEven = OddOrEven()
     def bindTips(tips: List[Tip]) = tips flatMap { tip =>
       val game = tip.game.obj
       bind("tip", chooseTemplate("tips", "list", xhtml),
@@ -103,7 +107,8 @@ class Tips {
            "game" -> (game map { _.name } openOr ""),
            "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
            "tip" -> tip.goals,
-           "result" -> (Result goalsForGame game))
+           "result" -> (Result goalsForGame game),
+           oddOrEven.next)
     }
     bind("tips", xhtml,
          "tipster" -> text(currentSearchedUser.is, currentSearchedUser(_)),
@@ -129,6 +134,8 @@ class Tips {
     def handleSave() {
       if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
+      log info "Saved tip: %s".format(tip)
+      log debug "referrer=%s".format(referrer)
       S redirectTo referrer
     }
     bind("tip", xhtml,

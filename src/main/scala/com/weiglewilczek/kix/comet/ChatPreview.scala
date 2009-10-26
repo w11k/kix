@@ -15,8 +15,8 @@
  */
 package com.weiglewilczek.kix.comet
 
-import lib._
-import DateHelpers._
+import lib.DateHelpers._
+import lib.Logging
 import model._
 
 import net.liftweb.common._
@@ -29,42 +29,23 @@ import net.liftweb.util._
 import Helpers._
 import scala.xml.{NodeSeq, Text}
 
-class Chat extends CometActor with CometListener with Logging {
-
-  override def fixedRender = {
-    var msg = ""
-    def handleSubmit() {
-      if (!msg.isEmpty) 
-        ChatServer ! ChatMsg(User.currentUser map { _.firstName.is } openOr "", 
-                             msg)
-    }
-    bind("chat", chooseTemplate("chat", "input", defaultXml), 
-         "input" -> text(msg, s => msg = s.trim),
-         "submit" -> submit(?("Post"), handleSubmit))
-  }
+class ChatPreview extends CometActor with CometListener with Logging {
 
   override def render = {
-    val oddOrEven = OddOrEven()
-    def bindMessages = {
-      lines.reverse flatMap { line =>
-        bind("msg", chooseTemplate("chat", "msgs", defaultXml),
-             "content" -> toXhtml(line, oddOrEven.nextString))
-      }
+    def bindMessages = lines.reverse flatMap { line =>
+      bind("msg", chooseTemplate("chat", "msgs", defaultXml),
+           "content" -> toXhtml(line))
     }
-    bind("chat", chooseTemplate("chat", "body", defaultXml), 
+    bind("chat", defaultXml, 
          AttrBindParam("id", Text(MsgsId), "id"),
          "msgs" -> bindMessages)
   }
 
   override def lowPriority = {
     case ChatServerUpdate(newLines) => {
-      val oddOrEven = OddOrEven()
       log debug "ChatServerUpdate received: %s".format(newLines)
-      val diff = newLines -- lines
-      lines :::= diff
-      partialUpdate(diff.reverse map { line => 
-        AppendHtml(MsgsId, toXhtml(line, oddOrEven.nextString)) 
-      })
+      lines = newLines take 3
+      partialUpdate(SetHtml(MsgsId, lines.reverse map { toXhtml(_) }))
     }
   }
 
@@ -74,12 +55,9 @@ class Chat extends CometActor with CometListener with Logging {
 
   private var lines = List[ChatLine]()
 
-  private def toXhtml(line: ChatLine, oddOrEven: String) =
-    <div class={ oddOrEven + " chatLine" }>
-      <i>{ formatTime(line.when, locale) }</i>
-      { " " }
-      <b>{ line.name }</b>
-      <br/>
-      { line.msg }
-    </div>
+  private def toXhtml(line: ChatLine) = {
+    def msg = if (line.msg.length <= 18) line.msg take 18
+              else (line.msg take 15) + "..."
+    <div><b>{ line.name + " "}</b>{ msg }</div>
+  }
 }

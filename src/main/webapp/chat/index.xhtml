@@ -1,11 +1,21 @@
 <lift:surround with="default" at="content" xmlns:lift="http://liftweb.net/">
-  <lift:Chat form="post">
-    <h3 class="alt">
-      <lift:loc>kix Chat</lift:loc>
-    </h3>
-    <div>
-      <chat:msg/>&nbsp;
-      <chat:post/>
-    </div>
-  </lift:Chat>
+  <h3>
+    <lift:loc>kix Chat</lift:loc>
+  </h3>
+  <lift:comet type="Chat">
+    <chat:body>
+      <div chat:id="na">
+        <chat:msgs>
+          <msg:content/>
+        </chat:msgs>
+      </div>
+      <hr/>
+    </chat:body>
+    <chat:input>
+      <form method="post">
+        <chat:input/>&nbsp;
+        <chat:submit/>
+      </form>
+    </chat:input>
+  </lift:comet>
 </lift:surround>
