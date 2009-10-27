@@ -32,10 +32,9 @@ import scala.xml.{NodeSeq, Text}
 class ChatPreview extends CometActor with CometListener with Logging {
 
   override def render = {
-    val oddOrEven = OddOrEven()
     def bindMessages = lines.reverse flatMap { line =>
       bind("msg", chooseTemplate("chat", "msgs", defaultXml),
-           "content" -> toXhtml(line, oddOrEven.nextString))
+           "content" -> toXhtml(line))
     }
     bind("chat", defaultXml, 
          AttrBindParam("id", Text(MsgsId), "id"),
@@ -44,10 +43,9 @@ class ChatPreview extends CometActor with CometListener with Logging {
 
   override def lowPriority = {
     case ChatServerUpdate(newLines) => {
-      val oddOrEven = OddOrEven()
       log debug "ChatServerUpdate received: %s".format(newLines)
       lines = newLines take 3
-      partialUpdate(SetHtml(MsgsId, lines.reverse map { toXhtml(_, oddOrEven.nextString) }))
+      partialUpdate(SetHtml(MsgsId, lines.reverse map { toXhtml(_) }))
     }
   }
 
@@ -57,10 +55,10 @@ class ChatPreview extends CometActor with CometListener with Logging {
 
   private var lines = List[ChatLine]()
 
-  private def toXhtml(line: ChatLine, oddOrEven: String) = {
+  private def toXhtml(line: ChatLine) = {
     def msg = if (line.msg.length <= 23) line.msg take 23
               else (line.msg take 20) + "..."
-    <div class={ oddOrEven + " chatLine" }>
+    <div class="chatLine">
       <b>{ line.name }</b>{ " " + msg }
     </div>
   }

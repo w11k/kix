@@ -32,50 +32,50 @@ import scala.xml.{NodeSeq, Text}
 class Chat extends CometActor with CometListener with Logging {
 
   override def fixedRender = {
-    var msg = ""
-    def handleSubmit() {
+    def handleSubmit(msg: String) {
       if (!msg.isEmpty) 
-        ChatServer ! ChatMsg(User.currentUser map { _.shortName } openOr "", 
-                             msg)
+        ChatServer ! ChatMsg(User.currentUser map { _.shortName } openOr "", msg)
     }
-    bind("chat", chooseTemplate("chat", "input", defaultXml), 
-         "input" -> text(msg, s => msg = s.trim, "size" -> "64"),
-         "submit" -> submit(?("Post"), handleSubmit))
+    ajaxForm(After(100, SetValueAndFocus(InputId, "")),
+             bind("chat", chooseTemplate("chat", "input", defaultXml), 
+                  "input" -> text("", s => handleSubmit(s.trim), 
+                                  "size" -> "64", "id" -> InputId),
+                  "submit" -> submit(?("Post"), () => ())))
   }
 
   override def render = {
-    val oddOrEven = OddOrEven()
     def bindMessages = {
       lines.reverse flatMap { line =>
         bind("msg", chooseTemplate("chat", "msgs", defaultXml),
-             "content" -> toXhtml(line, oddOrEven.nextString))
+             "content" -> toXhtml(line))
       }
     }
     bind("chat", chooseTemplate("chat", "body", defaultXml), 
-         AttrBindParam("id", Text(MsgsId), "id"),
+         AttrBindParam("id", Text(BodyId), "id"),
          "msgs" -> bindMessages)
   }
 
   override def lowPriority = {
     case ChatServerUpdate(newLines) => {
-      val oddOrEven = OddOrEven()
       log debug "ChatServerUpdate received: %s".format(newLines)
       val diff = newLines -- lines
       lines :::= diff
       partialUpdate(diff.reverse map { line => 
-        AppendHtml(MsgsId, toXhtml(line, oddOrEven.nextString)) 
+        AppendHtml(BodyId, toXhtml(line)) 
       })
     }
   }
 
   override def registerWith = ChatServer
 
-  private lazy val MsgsId = uniqueId + "_msgs"
+  private lazy val BodyId = uniqueId + "_body"
+
+  private lazy val InputId = uniqueId + "_input"
 
   private var lines = List[ChatLine]()
 
-  private def toXhtml(line: ChatLine, oddOrEven: String) =
-    <div class={ oddOrEven + " chatLine" }>
+  private def toXhtml(line: ChatLine) =
+    <div class="chatLine">
       <i>[{ formatTime(line.when, locale) }]</i>
       { " " }
       <b>{ line.name }</b>
