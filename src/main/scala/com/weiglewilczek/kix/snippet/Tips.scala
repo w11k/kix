@@ -77,20 +77,22 @@ class Tips extends Logging {
   def myTips(xhtml: NodeSeq) = {
     val oddOrEven = OddOrEven()
     def bindTips(tips: List[Tip]) = {
-      def bindAction(game: Box[Game], tip: Tip) =
+      def bindAction(game: Box[Game], tip: Tip, result: String) =
         if (User.loggedIn_?) 
           if(notYetStarted_?(game)) Tips editDelete tip
+          else if (result.isEmpty) NodeSeq.Empty
           else Tips points tip
         else
           NodeSeq.Empty 
       tips flatMap { tip =>
         val game = tip.game.obj
+        val result = Result goalsForGame game
         bind("tip", chooseTemplate("tips", "list", xhtml),
-             "action" -> bindAction(game, tip),
+             "action" -> bindAction(game, tip, result),
              "game" -> (game map { _.name } openOr ""),
              "date" -> (game map { g => format(g.date.is, locale) } openOr ""),
              "tip" -> tip.goals,
-             "result" -> (Result goalsForGame game),
+             "result" -> result,
              AttrBindParam("id", Text(tip.id.is.toString), "id"),
              oddOrEven.next)
       }
