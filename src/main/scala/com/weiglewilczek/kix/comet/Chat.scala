@@ -35,11 +35,11 @@ class Chat extends CometActor with CometListener with Logging {
     var msg = ""
     def handleSubmit() {
       if (!msg.isEmpty) 
-        ChatServer ! ChatMsg(User.currentUser map { _.firstName.is } openOr "", 
+        ChatServer ! ChatMsg(User.currentUser map { _.shortName } openOr "", 
                              msg)
     }
     bind("chat", chooseTemplate("chat", "input", defaultXml), 
-         "input" -> text(msg, s => msg = s.trim),
+         "input" -> text(msg, s => msg = s.trim, "size" -> "64"),
          "submit" -> submit(?("Post"), handleSubmit))
   }
 
@@ -76,7 +76,7 @@ class Chat extends CometActor with CometListener with Logging {
 
   private def toXhtml(line: ChatLine, oddOrEven: String) =
     <div class={ oddOrEven + " chatLine" }>
-      <i>{ formatTime(line.when, locale) }</i>
+      <i>[{ formatTime(line.when, locale) }]</i>
       { " " }
       <b>{ line.name }</b>
       <br/>

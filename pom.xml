@@ -6,7 +6,7 @@
   <groupId>com.weiglewilczek.kix</groupId>
   <artifactId>kix</artifactId>
   <name>kix</name>
-  <version>1.0-M2</version>
+  <version>1.0</version>
   <packaging>war</packaging>
 
   <organization>

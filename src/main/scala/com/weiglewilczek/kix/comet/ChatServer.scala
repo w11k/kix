@@ -36,7 +36,7 @@ object ChatServer extends LiftActor with ListenerManager with Logging {
 
   override protected def createUpdate = ChatServerUpdate(chatLines)
 
-  private var chatLines = List(ChatLine("kix", now, ?("Welcome to the kix chat!")))
+  private var chatLines = List[ChatLine]()
 }
 
 case class ChatServerUpdate(lines: List[ChatLine])

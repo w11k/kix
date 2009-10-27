@@ -78,6 +78,12 @@ object User extends User with MetaMegaProtoUser[User] {
 */
 class User extends MegaProtoUser[User] {
 
+  override def shortName = {
+    val s = super.shortName
+    val i = s indexOf "@"
+    if (i == -1) s else s.substring(0, i)
+  }
+
   override def firstNameDisplayName = ?("Name") 
 
   override def getSingleton = User
