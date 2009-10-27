@@ -29,28 +29,26 @@ import scala.xml.{NodeSeq, Text}
 object Tip extends Tip with LongKeyedMetaMapper[Tip] {
 
   def findByUser(user: Box[User]) =
-    user map { u => findByUserId(u.id) } openOr Nil
-
-  def findByUserId(id: Long) = findAll(By(Tip.user, id))
+    user map { u => findAll(By(Tip.user, u.id),
+                            PreCache(Tip.game))
+    } openOr Nil
 
   def findByUserAndGameId(user: Box[User], gameId: Long) =
     user map { u => find(By(Tip.user, u.id), By(Tip.game, gameId)) } openOr Empty
 
-  def findNotByUser(user: Box[User]) =
-    user map { u => findNotByUserId(u.id) } openOr Nil
-
-  def findNotByUserId(id: Long) = findAll(NotBy(Tip.user, id))
-
   def findNotByUserLikeUserName(user: Box[User], name: String) =
     user map { u => findNotByUserIdLikeUserName(u.id, name) } openOr Nil
 
-  def findNotByUserIdLikeUserName(id: Long, name: String) = {
+  private def findNotByUserIdLikeUserName(id: Long, name: String) = {
     val trimmedName = name.trim
-    def queryName = 
-      if (trimmedName endsWith "%") trimmedName else trimmedName + "%" 
-    if (trimmedName.isEmpty) findNotByUserId(id)
-    else findAll(NotBy(Tip.user, id), 
-                 In(Tip.user, User.id, Like(User.firstName, queryName)))
+    lazy val queryName = if (trimmedName endsWith "%") trimmedName else trimmedName + "%" 
+    if (trimmedName.isEmpty)
+      findAll(NotBy(Tip.user, id),
+              PreCache(Tip.game))
+    else 
+      findAll(NotBy(Tip.user, id), 
+              In(Tip.user, User.id, Like(User.firstName, queryName)),
+              PreCache(Tip.game))
   }
 }
 
@@ -63,7 +61,7 @@ class Tip extends LongKeyedMapper[Tip] with IdPK {
 
   object game extends MappedGame(this) {
     override def selectableGames = {
-      val userTips: List[Long] = Tip findByUserId user.is map { _.game }
+      val userTips: List[Long] = Tip findAll By(Tip.user, user.is) map { _.game }
       Game.findAll filter { game =>
         !(userTips contains game.id.is) && game.date.after(now)
       }
