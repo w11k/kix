@@ -1,5 +1,6 @@
 db.driver=org.apache.derby.jdbc.ClientDriver
 db.url=jdbc:derby://localhost/kix;create=true
+db.poolSize=10
 mail.smtp.host=smtp.gmail.com
 mail.smtp.auth=true
 mail.smtp.starttls.enable=true

@@ -26,7 +26,10 @@ import Helpers._
 /**
  * Helper for a persistent result.
  */
-object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[Long, Result] {
+object Result extends Result 
+              with LongKeyedMetaMapper[Result] 
+              with SuperCRUDify[Long, Result] 
+              with Logging {
 
   val GoalRange = 0 to 20
 
@@ -64,16 +67,12 @@ object Result extends Result with LongKeyedMetaMapper[Result] with SuperCRUDify[
           case x =>
             tip.points(x).save
             user.points(user.points.is + x).save
-            Log info "Added %s points for tipster %s.".format(x, user.shortName)
+            log info "Added %s points for tipster %s.".format(x, user.shortName)
         }
       }
     }
-    Log info "XXX"
     for (game <- Game find result.game.is) {
-      Log info "XXX Game" + game.name
       for (team1 <- game.team1.obj; team2 <- game.team2.obj) {
-        Log info "XXX Team1" + team1.name
-        Log info "XXX Team2" + team2.name
         inc(team1.posGoals, result.goals1.is)
         inc(team1.negGoals, result.goals2.is)
         inc(team2.posGoals, result.goals2.is)

@@ -15,6 +15,8 @@
  */
 package com.weiglewilczek.kix.model
 
+import lib._
+
 import net.liftweb.common._
 import net.liftweb.mapper._
 import net.liftweb.http.S.{?, ??}
@@ -26,7 +28,7 @@ import scala.xml.NodeSeq
  /**
  * Helper for a persistent user.
  */
-object User extends User with MetaMegaProtoUser[User] {
+object User extends User with MetaMegaProtoUser[User] with Logging {
 
   override def signupFields = firstName :: email :: password :: Nil
 
@@ -65,7 +67,7 @@ object User extends User with MetaMegaProtoUser[User] {
             .password("kixadmin")
             .superUser(true)
             .validated(true).save
-      Log info "Created admin user: admin@kix.com, kixadmin"
+      log info "Created admin user: admin@kix.com, kixadmin"
     }
   }
 

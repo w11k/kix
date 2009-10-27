@@ -107,15 +107,55 @@ class Boot extends Bootable with Logging {
   }
 }
 
-private object DBVendor extends ConnectionManager {
+private object DBVendor extends ConnectionManager with Logging {
 
   Class forName (Props get "db.driver" openOr "org.h2.Driver")
 
-  def newConnection(id: ConnectionIdentifier): Box[Connection] = {
+  def newConnection(name: ConnectionIdentifier) = synchronized {
+    pool match {
+      case Nil if poolSize < maxPoolSize =>
+        val cnn = createOne
+        for(c <- cnn) { 
+          poolSize = poolSize + 1
+          pool ::= c
+          log debug "Returned new connection from pool, new pool size = %s".format(poolSize)
+        }
+        cnn
+      case Nil => 
+        wait(200L)
+        newConnection(name)
+      case x :: xs => try {
+        x setAutoCommit false
+        log debug "Returned old connection from pool."
+        Full(x)
+      } catch {
+        case e => try {
+          pool = xs
+          poolSize -= 1
+          x.close
+          newConnection(name)
+        } catch {
+          case e => newConnection(name)
+        }
+      }
+    }
+  }
+
+  def releaseConnection(conn: Connection) = synchronized {
+    pool = conn :: pool
+    notify
+  }
+
+  private var pool: List[Connection] = Nil
+
+  private var poolSize = 0
+
+  private val maxPoolSize = (Props get "db.poolSize" openOr "5").toInt
+
+  private def createOne: Box[Connection] = try {
     try {
-      val con = DriverManager getConnection (Props get "db.url" openOr "jdbc:h2:~/.h2/kix")
-      Log debug "Successfully got new Connection."
-      Full(con)
+      val cnn = DriverManager getConnection (Props get "db.url" openOr "jdbc:h2:~/.h2/kix")
+      Full(cnn)
     } catch {
       case e: Exception => {
         // TODO Better exception handling!
@@ -123,9 +163,5 @@ private object DBVendor extends ConnectionManager {
         Empty
       }
     }
-  }
-
-  def releaseConnection(con: Connection) {
-    con.close
   }
 }
