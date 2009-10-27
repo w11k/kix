@@ -35,14 +35,11 @@ class Boot extends Bootable with Logging {
   override def boot() {
     log info "Booting kix, please stand by ..."
 
-    // Freeze locale as GERMAN
     LiftRules.localeCalculator = 
       req => SessionLocale.is openOr LiftRules.defaultLocaleCalculator(req)
 
-    // Add "messages.properties" resources
     LiftRules.resourceNames = "messages" :: "teams" :: Nil
 
-    // Use UTF-8
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }
 
     LiftRules.formatDate = 
@@ -53,10 +50,8 @@ class Boot extends Bootable with Logging {
       case s    => parse(s, S.locale)
     }
 
-    // Use com.kix to resolve snippets and views
     LiftRules addToPackages getClass.getPackage
 
-    // Setup sitemap: Home, CRUD stuff, ...
     val ifLoggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/index"))
 
     val homeMenu = Menu(Loc("home", ("index" :: Nil) -> false, "Home")) :: Nil
@@ -74,6 +69,8 @@ class Boot extends Bootable with Logging {
                         tipsSubMenu: _*) :: Nil
     val chatMenu = Menu(Loc("chat", ("chat":: "index" :: Nil) -> false,
                             ?("Chat"), ifLoggedIn)) :: Nil
+    val aboutMenu = Menu(Loc("about", ("about":: "index" :: Nil) -> false,
+                             ?("About kix"))) :: Nil
     val ifAdmin = If(() => User.superUser_?, () => RedirectResponse("/index"))
     val adminSubMenu = Team.menus ::: Game.menus ::: Result.menus
     val adminMenu = Menu(Loc("admin", ("admin" :: Nil) -> true, "Admin", ifAdmin),
@@ -84,11 +81,11 @@ class Boot extends Bootable with Logging {
                 groupsMenu :::
                 tipsMenu :::
                 chatMenu :::
+                aboutMenu :::
                 adminMenu :::
                 User.sitemap
     LiftRules setSiteMap SiteMap(menus : _*)
 
-    // Configure Mailer
     val user = Props get "mail.user" openOr "kixwjaxchallenge@googlemail.com"
     val pwd = Props get "mail.pwd" openOr "thewinnerislift"
     Mailer.authenticator = Full(new Authenticator {
@@ -96,7 +93,6 @@ class Boot extends Bootable with Logging {
         new PasswordAuthentication(user , pwd)
     })
 
-    // Setup database
     DB.defineConnectionManager(DefaultConnectionIdentifier , DBVendor)
     Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
     User.eventuallyCreateAdmin()
