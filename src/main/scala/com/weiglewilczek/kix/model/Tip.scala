@@ -39,14 +39,14 @@ object Tip extends Tip with LongKeyedMetaMapper[Tip] {
   def findNotByUserLikeUserName(user: Box[User], name: String) =
     user map { u => findNotByUserIdLikeUserName(u.id, name) } openOr Nil
 
-  private def findNotByUserIdLikeUserName(id: Long, name: String) = {
+  private def findNotByUserIdLikeUserName(userId: Long, name: String) = {
     val trimmedName = name.trim
     lazy val queryName = if (trimmedName endsWith "%") trimmedName else trimmedName + "%" 
     if (trimmedName.isEmpty)
-      findAll(NotBy(Tip.user, id),
+      findAll(NotBy(Tip.user, userId),
               PreCache(Tip.game))
     else 
-      findAll(NotBy(Tip.user, id), 
+      findAll(NotBy(Tip.user, userId), 
               In(Tip.user, User.id, Like(User.firstName, queryName)),
               PreCache(Tip.game))
   }

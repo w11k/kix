@@ -36,23 +36,29 @@ object Game extends Game with LongKeyedMetaMapper[Game] with SuperCRUDify[Long, 
   override def showAllMenuDisplayName = ?("Games")
 
   def all = findAll(OrderBy(date, Ascending),
-                    OrderBy(group, Ascending))
+                    OrderBy(group, Ascending),
+                    PreCache(team1, false), PreCache(team2, false))
 
   def upcoming = findAll(By_>(date, now), 
                          OrderBy(date, Ascending),
-                         OrderBy(group, Ascending))
+                         OrderBy(group, Ascending),
+                         PreCache(team1, false), PreCache(team2, false))
 
   def upcoming(n: Int) = findAll(By_>(date, now), 
                                  OrderBy(date, Ascending),
                                  OrderBy(group, Ascending),
-                                 MaxRows(n))
+                                 MaxRows(n),
+                                 PreCache(team1, false), PreCache(team2, false))
 
   def past = findAll(By_<(date, now), 
                      OrderBy(date, Ascending),
-                     OrderBy(group, Ascending))
+                     OrderBy(group, Ascending),
+                     PreCache(team1, false), PreCache(team2, false))
 
-  def findByGroup(group: Group.Value) = findAll(By(Game.group, group), 
-                                                OrderBy(date, Ascending))
+  def findByGroup(group: Group.Value) = 
+    findAll(By(Game.group, group), 
+            OrderBy(date, Ascending),
+            PreCache(team1, false), PreCache(team2, false))
 
   def notYetStarted_?(game: Box[Game]) =
     game map { _.date.is after now } openOr false
