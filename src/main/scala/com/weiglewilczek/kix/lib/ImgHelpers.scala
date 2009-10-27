@@ -42,12 +42,11 @@ object ImgHelpers {
   def ajaxDeleteImg(onclick: (String, JsExp)) =
     img("/images/delete.png", ?("Delete Tip"), onclick._2)
 
-  def fiveImg = img("/images/up.png", ?("Five Points")) ++
-                img("/images/up.png", ?("Five Points"))
+  def fiveImg = img("/images/number_5.png", ?("Five Points"))
 
-  def fourImg = img("/images/up.png", ?("Four Points"))
+  def fourImg = img("/images/number_4.png", ?("Four Points"))
 
-  def threeImg = img("/images/right.png", ?("Three Points"))
+  def threeImg = img("/images/number_3.png", ?("Three Points"))
 
-  def zeroImg = img("/images/down.png", ?("Zero Points"))
+  def zeroImg = img("/images/number_0.png", ?("Zero Points"))
 }
