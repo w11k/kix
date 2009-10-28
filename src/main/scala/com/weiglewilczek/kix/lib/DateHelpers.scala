@@ -24,6 +24,10 @@ import net.liftweb.common._
 import net.liftweb.util._
 import TimeHelpers.now
 
+/**
+ * Some utilities for date handling. We also offer an implicit conversion
+ * from String to Date.
+ */
 object DateHelpers {
 
   val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"

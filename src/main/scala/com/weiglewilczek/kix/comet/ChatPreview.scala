@@ -29,6 +29,9 @@ import net.liftweb.util._
 import Helpers._
 import scala.xml.{NodeSeq, Text}
 
+/**
+ * Comet enabled chat preview showing the latest three messages.
+ */
 class ChatPreview extends CometActor with CometListener with Logging {
 
   override def render = {

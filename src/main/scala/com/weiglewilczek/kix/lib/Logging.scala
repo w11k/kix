@@ -18,7 +18,7 @@ package com.weiglewilczek.kix.lib
 import net.liftweb.util.LogBoot._
 
 /**
- * Mixing this trait into whatever type you want to be able to log.
+ * We mix this trait into whatever type we want to be able to log.
  */
 trait Logging {
   val log = loggerByName(this.getClass.getName)

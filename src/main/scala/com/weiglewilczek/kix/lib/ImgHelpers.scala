@@ -19,6 +19,9 @@ import net.liftweb.http.S.?
 import net.liftweb.http.js._
 import scala.xml._
 
+/**
+ * Some utilities for image handling, mostly specific for our application.
+ */
 object ImgHelpers {
 
   def img(src: String, title: => String, attribs: Tuple2[String, String]*) = {

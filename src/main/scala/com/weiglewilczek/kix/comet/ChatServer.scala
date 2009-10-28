@@ -23,14 +23,16 @@ import net.liftweb.http._
 import S.?
 import net.liftweb.util.Helpers._
 
+/**
+ * Server for Comet enabled chat.
+ */
 object ChatServer extends LiftActor with ListenerManager with Logging {
 
   override def lowPriority = {
     case chatMsg @ ChatMsg(name, msg) if msg.trim.length > 0 =>
-      log info "Received ChatMsg: %s".format(chatMsg)
+      log debug "Received ChatMsg: %s".format(chatMsg)
       chatLines ::= ChatLine(name, now, msg)
       chatLines = chatLines take 5
-      log debug "Chat lines are now: %s".format(chatLines)
       updateListeners()
   }
 

@@ -29,6 +29,9 @@ import net.liftweb.util._
 import Helpers._
 import scala.xml.{NodeSeq, Text}
 
+/**
+ * Comet enabled chat showing all messages and rendering an input.
+ */
 class Chat extends CometActor with CometListener with Logging {
 
   override def fixedRender = {

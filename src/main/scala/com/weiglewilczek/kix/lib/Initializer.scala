@@ -22,7 +22,8 @@ import lib.DateHelpers._
 import net.liftweb.util.TimeHelpers._
 
 /**
- * Initializes the match schedule.
+ * Initializes the match schedule. In order to set up the "real" match schedule
+ * complete initTeamsAndGames().
  */
 object Initializer {
 

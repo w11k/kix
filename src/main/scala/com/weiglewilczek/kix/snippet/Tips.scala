@@ -136,8 +136,7 @@ class Tips extends Logging {
     def handleSave() {
       if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
-      log info "Saved tip: %s".format(tip)
-      log debug "referrer=%s".format(referrer)
+      log debug "Saved tip: %s".format(tip)
       S redirectTo referrer
     }
     bind("tip", xhtml,

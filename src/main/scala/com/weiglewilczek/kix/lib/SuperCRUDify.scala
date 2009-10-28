@@ -18,6 +18,9 @@ package com.weiglewilczek.kix.lib
 import net.liftweb.http.S.?
 import net.liftweb.mapper._
 
+/**
+ * Pimping CRUDify to be a better i18n citizen.
+ */
 trait SuperCRUDify[K, T <: KeyedMapper[K, T]] extends CRUDify[K, T] {
   self: T with KeyedMetaMapper[K, T] =>
 

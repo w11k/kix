@@ -67,7 +67,7 @@ object Result extends Result
           case x =>
             tip.points(x).save
             user.points(user.points.is + x).save
-            log info "Added %s points for tipster %s.".format(x, user.shortName)
+            log debug "Added %s points for tipster %s.".format(x, user.shortName)
         }
       }
     }

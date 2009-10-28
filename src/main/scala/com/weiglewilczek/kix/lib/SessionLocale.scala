@@ -19,4 +19,7 @@ import java.util.Locale
 import net.liftweb.common._
 import net.liftweb.http._
 
+/**
+ * We store the user's choice for a Locale here.
+ */
 object SessionLocale extends SessionVar[Box[Locale]](Empty)

@@ -20,6 +20,9 @@ import SHtml._
 import net.liftweb.util.Helpers._
 import scala.xml.Text
 
+/**
+ * Utility used for distinguishing odd and even table rows by color.
+ */
 case class OddOrEven() {
 
   def next = {
