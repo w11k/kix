@@ -20,7 +20,7 @@ import lib._
 import DateHelpers._
 
 import java.sql.{Connection, DriverManager}
-import java.util.{Date, Locale}
+import java.util.{Date, Locale, ResourceBundle}
 import javax.mail.{Authenticator, PasswordAuthentication}
 import net.liftweb.common._
 import net.liftweb.http._
@@ -29,6 +29,7 @@ import net.liftweb.mapper._
 import net.liftweb.sitemap._
 import Loc._
 import net.liftweb.util._
+import Helpers.tryo
 
 /**
  * Here we configure our Lift application.
@@ -40,6 +41,10 @@ class Boot extends Bootable with Logging {
 
     // i18n and formatting stuff
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }
+    LiftRules.resourceBundleFactories prepend {
+      case (name, locale) =>
+        tryo { ResourceBundle.getBundle("i18n." + name, locale) } openOr null
+    }
     LiftRules.resourceNames = "messages" :: "teams" :: Nil
     LiftRules.localeCalculator = 
       req => SessionLocale.is openOr LiftRules.defaultLocaleCalculator(req)
