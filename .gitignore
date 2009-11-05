@@ -6,6 +6,7 @@
 .project
 .settings
 .svn
+kix.h2*
 nbactions.xml
 runner
 target

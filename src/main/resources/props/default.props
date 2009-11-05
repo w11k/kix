@@ -1,6 +1,6 @@
-db.driver=org.apache.derby.jdbc.ClientDriver
-db.url=jdbc:derby://localhost/kix;create=true
-db.pool.size=5
+#db.driver=org.apache.derby.jdbc.ClientDriver
+#db.url=jdbc:derby://localhost/kix;create=true
+#db.pool.size=5
 mail.user=kixwjaxchallenge@googlemail.com
 mail.pwd=thewinnerislift
 mail.smtp.host=smtp.gmail.com
