@@ -52,9 +52,8 @@ import Games._
 
 class Games {
 
-  def upcoming5(xhtml: NodeSeq) = {
+  def upcoming5(xhtml: NodeSeq) =
     bind("games", xhtml, "list" -> bindGames(Game upcoming 5, xhtml))
-  }
 
   def forDateRange(xhtml: NodeSeq) = {
     def findForDateRange(dateRange: DateRange.Value) = dateRange match {
