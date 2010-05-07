@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.snippet
+package com.weiglewilczek.kix
+package snippet
 
 import lib._
 import DateHelpers._
@@ -72,7 +73,7 @@ object Tips {
 
 import Tips._
 
-class Tips extends Logging {
+class Tips extends Loggable {
 
   def myTips(xhtml: NodeSeq) = {
     val oddOrEven = OddOrEven()
@@ -136,7 +137,7 @@ class Tips extends Logging {
     def handleSave() {
       if (notYetStarted_?(Game findByKey tip.game.is)) tip.save
       else S notice ?("Cannot save tip, because game alredy started!")
-      log debug "Saved tip: %s".format(tip)
+      logger debug "Saved tip: %s".format(tip)
       S redirectTo referrer
     }
     bind("tip", xhtml,

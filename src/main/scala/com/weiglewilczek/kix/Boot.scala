@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ import Helpers.tryo
 /**
  * Here we configure our Lift application.
  */
-class Boot extends Bootable with Logging {
+class Boot extends Bootable with Loggable {
 
   override def boot() {
-    log info "Booting kix, please stand by ..."
+    logger info "Booting kix, please stand by ..."
 
     // i18n and formatting stuff
     LiftRules.early append { _ setCharacterEncoding "UTF-8" }
@@ -90,24 +90,25 @@ class Boot extends Bootable with Logging {
     })
 
     // DB configuration
-    val dbVendor = 
+    val dbVendor =
       new StandardDBVendor(Props get "db.driver" openOr "org.h2.Driver",
                            Props get "db.url" openOr "jdbc:h2:kix",
-                           Empty, Empty) {
+                           Props get "db.user",
+                           Props get "db.password") {
       override def maxPoolSize = Props getInt "db.pool.size" openOr 3
     }
     DB.defineConnectionManager(DefaultConnectionIdentifier, dbVendor)
-    Schemifier.schemify(true, Log.infoF _, Team, Game, Result, Tip, User)
-    DB addLogFunc { (query, time) =>
-      log debug ("All queries took " + time + "ms.")
-      query.allEntries foreach { 
-        case DBLogEntry(stmt, duration) => log debug (stmt + " took " + duration + "ms.")
+    val dbLogger = Logger("com.weiglewilczek.kix.DB")
+    DB addLogFunc { (query, _) =>
+      query.allEntries foreach {
+        case DBLogEntry(stmt, duration) => dbLogger debug (stmt + " took " + duration + "ms.")
       }
     }
+    Schemifier.schemify(true, (dbLogger info _): (=> AnyRef) => Unit, Team, Game, Result, Tip, User)
     
     // TODO Remove for production: Let's always have a default admin
     User.eventuallyCreateAdmin()
 
-    log info "Successfully booted kix.com. Have fun!"
+    logger info "Successfully booted kix.com. Have fun!"
   }
 }

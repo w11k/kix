@@ -1,17 +1,49 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2009-2010 WeigleWilczek and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+
+<!--
+########################################################################################################################
+KIX
+########################################################################################################################
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+  ######################################################################################################################
+  Basics
+  ######################################################################################################################
+  -->
+
   <groupId>com.weiglewilczek.kix</groupId>
   <artifactId>kix</artifactId>
-  <name>kix</name>
-  <version>1.0</version>
+  <version>2.0</version>
   <packaging>war</packaging>
 
+  <!--
+  ######################################################################################################################
+  More project information
+  ######################################################################################################################
+  -->
+
+  <name>KIX</name>
+  <description>Football World Cup tipping implemented with Lift (W-JAX Challenge 2009).</description>
+  <url>http://www.weiglewilczek.com/</url>
+  <inceptionYear>2009</inceptionYear>
   <organization>
     <name>WeigleWilczek</name>
-    <url>http://www.weiglewilczek.com</url>
+    <url>http://www.weiglewilczek.com/</url>
   </organization>
   <licenses>
     <license>
@@ -19,14 +51,48 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>Heiko Seeberger</name>
+      <organization>WeigleWilczek</organization>
+      <email>heiko.seeberger@googlemail.com</email>
+    </developer>
+    <developer>
+      <name>Jan Blankenhorn</name>
+      <organization>WeigleWilczek</organization>
+      <email>blankenhorn@weiglewilczek.com</email>
+    </developer>
+  </developers>
+
+  <!--
+  ######################################################################################################################
+  Properties
+  ######################################################################################################################
+  -->
 
   <properties>
-    <scala.version>2.7.7</scala.version>
-    <lift.version>1.1-M7</lift.version>
+
+    <!-- Common plugin settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+
+    <!-- Specific project settings -->
+    <scala.version>2.8.0.Beta1</scala.version>
+    <lift.version>2.0-scala280-SNAPSHOT</lift.version>
+    <jetty.version>7.0.1.v20091125</jetty.version>
   </properties>
 
+  <!--
+  ######################################################################################################################
+  Dependencies
+  ######################################################################################################################
+  -->
+
   <dependencies>
+
+    <!-- Compile -->
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-webkit</artifactId>
@@ -37,68 +103,91 @@
       <artifactId>lift-mapper</artifactId>
       <version>${lift.version}</version>
     </dependency>
+
+    <!-- Provided -->
+    <!-- Just for IntelliJ! Overwrite scope with test where neccessary! -->
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-      <scope>runtime</scope>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-compiler</artifactId>
+      <version>${scala.version}</version>
+      <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derbyclient</artifactId>
-      <version>10.4.2.0</version>
-      <scope>runtime</scope>
-    </dependency>
+
+    <!-- Runtime -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.2.121</version>
+      <version>1.2.127</version>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-      <version>[6.1.16,7)</version>
-      <scope>provided</scope>
-    </dependency>
+
   </dependencies>
 
+  <!--
+  ######################################################################################################################
+  Build
+  ######################################################################################################################
+  -->
+
   <build>
-    <!-- This helps for importing Maven projects into Eclipse. -->
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
+
+      <!-- Plugins distributed by Maven (alphabetically sorted) -->
       <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <version>2.12</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <scalaVersion>${scala.version}</scalaVersion>
-          <args>
-            <arg>-target:jvm-1.5</arg>
-          </args>
-        </configuration>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.3</version>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-          <encoding>${project.build.sourceEncoding}</encoding>
-        </configuration>
+        <version>2.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.5</version>
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
+        <version>2.4.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.3</version>
         <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
+          <includes>
+            <include>**/*Spec.java</include>
+            <include>**/*Test.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <!-- Plugins distributed by 3rd parties (alphabetically sorted) -->
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty.version}</version>
+        <configuration>
+          <webAppConfig>
+            <contextPath>/</contextPath>
+          </webAppConfig>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
         </configuration>
       </plugin>
       <plugin>
@@ -106,7 +195,7 @@
         <artifactId>maven-license-plugin</artifactId>
         <version>1.4.0</version>
         <configuration>
-          <header>${basedir}/header.txt</header>
+          <header>${basedir}/resources/header.txt</header>
           <quiet>false</quiet>
           <failIfMissing>true</failIfMissing>
           <includes>
@@ -116,7 +205,6 @@
           <excludes>
             <exclude>.git/**</exclude>
             <exclude>**/.gitignore</exclude>
-            <exclude>**/.manager/**</exclude>
             <exclude>**/*.css</exclude>
             <exclude>**/*.txt</exclude>
             <exclude>**/*.xhtml</exclude>
@@ -140,37 +228,62 @@
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-source-plugin</artifactId>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <version>2.13.1</version>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+          <charset>${project.build.sourceEncoding}</charset>
+          <jvmArgs>
+            <jvmArg>-Xmx1024m</jvmArg>
+          </jvmArgs>
+          <args>
+            <arg>-target:jvm-1.5</arg>
+            <arg>-make:changed</arg>
+            <arg>-deprecation</arg>
+            <arg>-unchecked</arg>
+            <arg>-optimise</arg>
+          </args>
+        </configuration>
         <executions>
           <execution>
-            <id>attach-sources</id>
             <goals>
-              <goal>jar</goal>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <configuration>
-          <contextPath>/</contextPath>
-          <scanIntervalSeconds>0</scanIntervalSeconds>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
+  <!--
+  ######################################################################################################################
+  Environment
+  ######################################################################################################################
+  -->
+
+  <scm>
+    <connection>git://github.com/weiglewilczek/kix.git</connection>
+    <developerConnection>git@github.com:weiglewilczek/kix.git</developerConnection>
+    <url>http://github.com/weiglewilczek/kix</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>http://github.com/weiglewilczek/kix/issuess</url>
+  </issueManagement>
   <repositories>
     <repository>
-      <id>scala-tools.org</id>
+      <id>scala-tools.releases</id>
+      <name>Scala-Tools Dependencies Repository for Releases</name>
       <url>http://scala-tools.org/repo-releases</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
     </repository>
     <repository>
-      <id>scala-tools.org.snapshots</id>
+      <id>scala-tools.snapshots</id>
+      <name>Scala-Tools Dependencies Repository for Snapshots</name>
       <url>http://scala-tools.org/repo-snapshots</url>
       <releases>
         <enabled>false</enabled>
