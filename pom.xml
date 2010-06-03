@@ -79,7 +79,7 @@ KIX
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 
     <!-- Specific project settings -->
-    <scala.version>2.8.0.Beta1</scala.version>
+    <scala.version>2.8.0.RC3</scala.version>
     <lift.version>2.0-scala280-SNAPSHOT</lift.version>
     <jetty.version>7.0.1.v20091125</jetty.version>
   </properties>
