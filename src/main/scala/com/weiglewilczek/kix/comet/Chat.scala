@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.comet
+package com.weiglewilczek.kix
+package comet
 
 import lib._
 import DateHelpers._
@@ -24,7 +25,7 @@ import net.liftweb.http._
 import S._
 import SHtml._
 import js.JsCmds._
-import js.jquery.JqJsCmds._
+import js.jquery.JqJsCmds.AppendHtml
 import net.liftweb.util._
 import Helpers._
 import scala.xml.{NodeSeq, Text}
@@ -32,7 +33,7 @@ import scala.xml.{NodeSeq, Text}
 /**
  * Comet enabled chat showing all messages and rendering an input.
  */
-class Chat extends CometActor with CometListener with Logging {
+class Chat extends CometActor with CometListener with Loggable {
 
   override def fixedRender = {
     def handleSubmit(msg: String) {
@@ -60,8 +61,8 @@ class Chat extends CometActor with CometListener with Logging {
 
   override def lowPriority = {
     case ChatServerUpdate(newLines) => {
-      log debug "ChatServerUpdate received: %s".format(newLines)
-      val diff = newLines -- lines
+      logger debug "ChatServerUpdate received: %s".format(newLines)
+      val diff = newLines filterNot { lines contains _ }
       lines :::= diff
       partialUpdate(diff.reverse map { line => 
         AppendHtml(BodyId, toXhtml(line)) 

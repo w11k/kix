@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.model
+package com.weiglewilczek.kix
+package model
 
 import lib._
 
@@ -29,7 +30,7 @@ import Helpers._
 object Result extends Result 
               with LongKeyedMetaMapper[Result] 
               with SuperCRUDify[Long, Result] 
-              with Logging {
+              with Loggable {
 
   val GoalRange = 0 to 20
 
@@ -67,7 +68,7 @@ object Result extends Result
           case x =>
             tip.points(x).save
             user.points(user.points.is + x).save
-            log debug "Added %s points for tipster %s.".format(x, user.shortName)
+            logger debug "Added %s points for tipster %s.".format(x, user.shortName)
         }
       }
     }

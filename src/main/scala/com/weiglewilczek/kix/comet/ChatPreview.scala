@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.comet
+package com.weiglewilczek.kix
+package comet
 
 import lib._
 import DateHelpers._
@@ -32,7 +33,7 @@ import scala.xml.{NodeSeq, Text}
 /**
  * Comet enabled chat preview showing the latest three messages.
  */
-class ChatPreview extends CometActor with CometListener with Logging {
+class ChatPreview extends CometActor with CometListener with Loggable {
 
   override def render = {
     def bindMessages = lines.reverse flatMap { line =>
@@ -46,7 +47,7 @@ class ChatPreview extends CometActor with CometListener with Logging {
 
   override def lowPriority = {
     case ChatServerUpdate(newLines) => {
-      log debug "ChatServerUpdate received: %s".format(newLines)
+      logger debug "ChatServerUpdate received: %s".format(newLines)
       lines = newLines take 3
       partialUpdate(SetHtml(MsgsId, lines.reverse map { toXhtml(_) }))
     }

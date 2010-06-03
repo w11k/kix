@@ -1,12 +1,24 @@
+# Build directory
+target
+
+# Mac stuff
 .DS_Store
+
+# Eclipse stuff
 .classpath
 .launch
-.manager
 .metadata
 .project
+.scala_dependencies
 .settings
-.svn
-kix.h2*
-nbactions.xml
-runner
-target
+
+# IntelliJ stuff
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Chatter stuff
+kix.h2.*
+kix.log
+

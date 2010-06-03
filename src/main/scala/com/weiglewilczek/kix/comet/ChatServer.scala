@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.comet
-
-import lib.Logging
+package com.weiglewilczek.kix
+package comet
 
 import java.util.Date
 import net.liftweb.actor._
+import net.liftweb.common.Loggable
 import net.liftweb.http._
 import S.?
 import net.liftweb.util.Helpers._
@@ -26,11 +26,11 @@ import net.liftweb.util.Helpers._
 /**
  * Server for Comet enabled chat.
  */
-object ChatServer extends LiftActor with ListenerManager with Logging {
+object ChatServer extends LiftActor with ListenerManager with Loggable {
 
   override def lowPriority = {
     case chatMsg @ ChatMsg(name, msg) if msg.trim.length > 0 =>
-      log debug "Received ChatMsg: %s".format(chatMsg)
+      logger debug "Received ChatMsg: %s".format(chatMsg)
       chatLines ::= ChatLine(name, now, msg)
       chatLines = chatLines take 5
       updateListeners()

@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 WeigleWilczek and others.
+ * Copyright 2009-2010 WeigleWilczek and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.weiglewilczek.kix.lib
+package com.weiglewilczek.kix
+package lib
 
 import model._
 
@@ -28,7 +29,7 @@ import TimeHelpers.now
  * Some utilities for date handling. We also offer an implicit conversion
  * from String to Date.
  */
-object DateHelpers {
+object DateHelpers extends Loggable {
 
   val IsoDateTime = "yyyy-MM-dd'T'HH:mmz"
 
@@ -39,7 +40,7 @@ object DateHelpers {
   def parse(date: String, locale: Locale) = try {
     Full(shortDateTimeFormat(locale) parse date)
   } catch { case e => 
-    Log error ("Cannot parse date \"%s\"!".format(date), e)
+    logger error ("Cannot parse date \"%s\"!".format(date), e)
     Failure("Bad date: " + date, Full(e), Empty) 
   }
 
