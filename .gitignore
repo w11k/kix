@@ -22,3 +22,6 @@ target
 kix.h2.*
 kix.log
 
+#DB
+kix.lock.db
+kix.trace.db
