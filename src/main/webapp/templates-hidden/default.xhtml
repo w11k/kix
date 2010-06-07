@@ -6,8 +6,12 @@
     <title>kix</title>
     <lift:CSS.blueprint/>
     <lift:CSS.fancyType/>
-    <link rel="stylesheet" type="text/css" href="/style/kix.css"/>
-    <script type="text/javascript" src="/classpath/jquery.js"/>
+    <link rel="stylesheet" type="text/css" href="/style/ui-lightness/jquery-ui-1.8.custom.css"/>
+      <link rel="stylesheet" type="text/css" href="/style/data-table.css"/>
+      <link rel="stylesheet" type="text/css" href="/style/kix.css"/>
+      <script type="text/javascript" src="/classpath/jquery.js"/>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.custom.min.js"/>
+    <script type="text/javascript" src="/js/jquery.dataTables.1.7.0-beta.js"/>
   </head>
 
   <body>
@@ -86,13 +90,32 @@
         &nbsp;
       </div>
       <div class="span-12" style="text-align: center;">
-        <img src="/images/pbww.png"/>
+        <a href="http://www.weiglewilczek.com/" target="_blank"><img src="/images/pbww.png"/></a>
       </div>
       <div class="span-6 last" style="text-align: right;">
         <a href="http://www.nationalflaggen.de/" style="text-decoration: none; color: #777777">www.nationalflaggen.de
         </a>
       </div>
     </div>
+
+  <script type="text/javascript" charset="utf-8">
+        $(document).ready(
+            function() {
+                $('.dataTable').dataTable(
+                {
+                    "bPaginate": false,
+                    "bFilter": true,
+                    "bSort": true,
+                    "bInfo": true,
+                    "bAutoWidth": false,
+                    "bFilter": false
+                }
+                );
+            }
+        );
+    </script>
   </body>
+
+
 
 </html>

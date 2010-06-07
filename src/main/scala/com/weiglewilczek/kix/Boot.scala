@@ -23,6 +23,7 @@ import java.sql.{Connection, DriverManager}
 import java.util.{Date, Locale, ResourceBundle}
 import javax.mail.{Authenticator, PasswordAuthentication}
 import net.liftweb.common._
+import net.liftweb.http.js.jquery.JQuery14Artifacts
 import net.liftweb.http._
 import S.?
 import net.liftweb.mapper._
@@ -108,6 +109,9 @@ class Boot extends Bootable with Loggable {
     
     // TODO Remove for production: Let's always have a default admin
     User.eventuallyCreateAdmin()
+
+    // Other configuration stuff
+    LiftRules.jsArtifacts = JQuery14Artifacts
 
     logger info "Successfully booted kix.com. Have fun!"
   }
