@@ -7,7 +7,7 @@
       <lift:loc>Show</lift:loc>&nbsp;
       <games:date-range/>
     </div>
-    <table class="dataTable">
+    <table id="gamesDataTable">
       <thead>
       <tr>
         <th></th>
@@ -62,4 +62,23 @@
       </tbody>
     </table>
   </lift:Games.forDateRange>
+
+
+  <script type="text/javascript" charset="utf-8">
+        $(document).ready(
+            function() {
+                $('#gamesDataTable').dataTable(
+                {
+                    "bPaginate": false,
+                    "bFilter": true,
+                    "bSort": true,
+                    "bInfo": true,
+                    "bAutoWidth": false,
+                    "bFilter": false,
+                    "aaSorting": [[ 1, 'asc' ]],
+                }
+                );
+            }
+        );
+    </script>
 </lift:surround>
