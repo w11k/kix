@@ -47,6 +47,15 @@ object Games {
       case (Empty, true)      => Tips create game
       case _                  => NodeSeq.Empty
     }
+
+  def bindGoals(game: Game): String =
+    Tip.findByUserAndGameId(User.currentUser, game.id.is) match {
+      case Full(tip)  => Tips goals tip
+      case _          => ""
+    }
+
+  def bindResult(game: Game): String =
+    Result goalsForGame game
 }
 
 import Games._
@@ -78,6 +87,8 @@ class Games {
            "group" -> game.group.is.toString,
            "location" -> game.location.is,
            "teams" -> game.name,
+           "tip" -> bindGoals(game),
+           "result" -> bindResult(game),
            AttrBindParam("id", Text(game.id.is.toString), "id"),
            oddOrEven.next)
     }

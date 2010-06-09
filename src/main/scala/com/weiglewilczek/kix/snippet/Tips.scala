@@ -58,7 +58,11 @@ object Tips {
     case 3 => threeImg
     case _ => zeroImg
   }
-  
+
+
+  def goals(tip: Tip) =
+    tip.goals
+
   private object currentSearchedUser extends RequestVar[String]("")
   
   private object currentTip extends RequestVar[Box[Tip]](Empty)
