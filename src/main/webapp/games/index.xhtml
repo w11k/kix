@@ -7,7 +7,7 @@
       <lift:loc>Show</lift:loc>&nbsp;
       <games:date-range/>
     </div>
-    <table>
+    <table class="dataTable">
       <thead>
       <tr>
         <th></th>
@@ -25,27 +25,29 @@
         </th>
       </tr>
       </thead>
-      <games:list>
-        <tr game:class="">
-          <td>
-            <span game:id="">
-              <game:action/>
-            </span>
-          </td>
-          <td>
-            <game:date/>
-          </td>
-          <td>
-            <game:group/>
-          </td>
-          <td>
-            <game:location/>
-          </td>
-          <td>
-            <game:teams/>
-          </td>
-        </tr>
-      </games:list>
+      <tbody>
+          <games:list>
+            <tr game:class="">
+              <td>
+                <span game:id="">
+                  <game:action/>
+                </span>
+              </td>
+              <td>
+                <game:date/>
+              </td>
+              <td>
+                <game:group/>
+              </td>
+              <td>
+                <game:location/>
+              </td>
+              <td>
+                <game:teams/>
+              </td>
+            </tr>
+          </games:list>
+      </tbody>
     </table>
   </lift:Games.forDateRange>
 </lift:surround>
